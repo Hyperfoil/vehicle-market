@@ -34,7 +34,7 @@ Database populator to generate pre-populated databases for testing application a
 ### Service Orchestration :red_circle:
 Automated scripts for building, spinning up and terminating microservices in benchmark
 
-## Benchmark Application Services :red_circle:
+## Benchmark Application Services
 
 ### Vehicle discovery service :red_circle:
 A read-only service that provides a single point of contact regarding all available vehicles in the market. 
