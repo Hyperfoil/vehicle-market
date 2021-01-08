@@ -1,6 +1,6 @@
-package org.jboss.perf.vehicle.repository;
+package io.hyperfoil.market.vehicle.repository;
 
-import org.jboss.perf.vehicle.model.VehicleDescription;
+import io.hyperfoil.market.vehicle.model.VehicleDescription;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;

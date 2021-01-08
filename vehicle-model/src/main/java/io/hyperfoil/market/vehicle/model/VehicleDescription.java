@@ -1,4 +1,4 @@
-package org.jboss.perf.vehicle.model;
+package io.hyperfoil.market.vehicle.model;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;

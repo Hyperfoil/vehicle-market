@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.jboss.perf.vehicle-market</groupId>
+        <groupId>io.hyperfoil.vehicle-market</groupId>
         <artifactId>vehicle-market-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -12,24 +12,17 @@
     <packaging>war</packaging>
     <dependencies>
         <dependency>
-            <groupId>org.jboss.perf.vehicle-market</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>vehicle-model</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
     <profiles>
         <profile>
             <id>quarkus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

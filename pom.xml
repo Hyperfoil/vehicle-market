@@ -3,18 +3,14 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.jboss</groupId>
-        <artifactId>jboss-parent</artifactId>
-        <version>36</version>
-    </parent>
-    <groupId>org.jboss.perf.vehicle-market</groupId>
+    <groupId>io.hyperfoil.vehicle-market</groupId>
     <artifactId>vehicle-market-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>vehicle-discovery</module>
         <module>vehicle-model</module>
+        <module>frontend</module>
     </modules>
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -26,11 +22,11 @@
         <microprofile.version>3.2</microprofile.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus-plugin.version>1.3.0.Alpha1</quarkus-plugin.version>
-        <quarkus.platform.version>1.3.0.Alpha1</quarkus.platform.version>
+        <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
+        <quarkus.platform.version>1.10.5.Final</quarkus.platform.version>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
     </properties>
-    <dependencyManagement>
+    <!--<dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.eclipse.microprofile</groupId>
@@ -40,10 +36,13 @@
                 <scope>import</scope>
             </dependency>
         </dependencies>
-    </dependencyManagement>
+    </dependencyManagement>-->
     <profiles>
         <profile>
             <id>quarkus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

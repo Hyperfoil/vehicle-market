@@ -1,6 +1,6 @@
-package org.jboss.perf.vehicle.discovery;
+package io.hyperfoil.market.vehicle.discovery;
 
-import org.jboss.perf.vehicle.repository.VehicleDescriptionRepository;
+import io.hyperfoil.market.vehicle.repository.VehicleDescriptionRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
