@@ -1,0 +1,36 @@
+@font-face {
+  font-family: "ChangaOne";
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/ChangaOne-Regular.ttf');
+}
+@font-face {
+  font-family: "ChangaOne";
+  font-style: italic;
+  font-weight: 400;
+  src: url('fonts/ChangaOne-Italic.ttf');
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  src: url('fonts/OpenSans-Regular.ttf');
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/OpenSans-Bold.ttf');
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: italic;
+  font-weight: 400;
+  src: url('fonts/OpenSans-Italic.ttf');
+}
+@font-face {
+  font-family: "OpenSans";
+  font-style: italic;
+  font-weight: 700;
+  src: url('fonts/OpenSans-BoldItalic.ttf');
+}
