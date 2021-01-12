@@ -25,6 +25,8 @@
     <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
     <quarkus.platform.version>1.10.5.Final</quarkus.platform.version>
     <surefire-plugin.version>2.22.2</surefire-plugin.version>
+    <!-- -->
+    <org.apache.commons-csv.version>1.7</org.apache.commons-csv.version>
   </properties>
   <dependencyManagement>
     <dependencies>

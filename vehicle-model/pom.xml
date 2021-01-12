@@ -25,6 +25,9 @@
     <profiles>
         <profile>
             <id>quarkus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>

@@ -9,6 +9,8 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,7 +21,8 @@ public class VehicleOffer {
    @GeneratedValue
    private Long id;
 
-   @Column(nullable = false)
+   @ManyToOne(optional = false)
+   @JoinColumn(name="DESCRIPTION_ID")
    VehicleDescription model;
 
    // Base, Economy, Caravelle, Chick Magnet...

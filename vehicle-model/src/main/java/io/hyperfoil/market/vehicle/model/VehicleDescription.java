@@ -57,4 +57,93 @@ public class VehicleDescription {
     @Column(nullable = false)
     private String emissions;
 
+    // --- //
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getTrany() {
+        return trany;
+    }
+
+    public void setTrany(String trany) {
+        this.trany = trany;
+    }
+
+    public String getDrive() {
+        return drive;
+    }
+
+    public void setDrive(String drive) {
+        this.drive = drive;
+    }
+
+    public String getEngine() {
+        return engine;
+    }
+
+    public void setEngine(String engine) {
+        this.engine = engine;
+    }
+
+    public String getVClass() {
+        return vClass;
+    }
+
+    public void setVClass(String vClass) {
+        this.vClass = vClass;
+    }
+
+    public String getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(String fuel) {
+        this.fuel = fuel;
+    }
+
+    public int getSeats() {
+        return seats;
+    }
+
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
+
+    public String getEmissions() {
+        return emissions;
+    }
+
+    public void setEmissions(String emissions) {
+        this.emissions = emissions;
+    }
 }
