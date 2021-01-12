@@ -5,10 +5,11 @@
   position: fixed;
   top: 0;
   width: 100%;
-  transition: top 0.3s;
+  transition: top 0.7s;
   text-align: center;
   padding: 8px 0 8px 0;
   z-index: 100;
+  font-family: 'OpenSans';
 }
 
 .container {
@@ -16,6 +17,14 @@
   max-width: 1024px;
   display: inline-block;
   text-align: left;
+}
+
+#title {
+  font-size: 28px !important;
+  font-family: "ChangaOne";
+  font-style: italic;
+  text-transform: uppercase;
+  margin-right: 30px;
 }
 
 #navbar .container a {
@@ -42,4 +51,5 @@
   padding-top: 52px;
   background-color: var(--theme-color-very-light);
   text-align: center;
+  font-family: 'OpenSans';
 }

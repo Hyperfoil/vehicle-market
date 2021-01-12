@@ -20,7 +20,6 @@ import javax.persistence.Table;
         @Index(columnList = "FUEL", name = "V_DESCRIPTION_FUEL"),
 })
 public class VehicleDescription {
-
     @Id
     @GeneratedValue
     private Long id;

@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 
@@ -25,6 +26,7 @@ public class ImageService {
 
    @GET
    @Path("car")
+   @Produces("image/svg+xml")
    @Cache
    public String car(@QueryParam("type") String type, @QueryParam("color") String color) {
       ParsedImage image = images.computeIfAbsent(type, t -> {

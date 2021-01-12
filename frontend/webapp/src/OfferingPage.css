@@ -1,0 +1,53 @@
+.offering {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.carousel {
+    margin-bottom: 30px;
+    margin-left: calc(50% - 50vw);
+    width: 100vw;
+    height: 300px;
+    text-align: center;
+}
+
+.carousel img {
+    height: 100%;
+    margin: 0 5px 0 5px;
+    border: 1px solid #ccc;
+    background: rgb(96,96,96);
+    background: linear-gradient(0deg, rgba(96,96,96,1) 0%, rgba(232,232,232,1) 100%);
+    box-shadow: 5px 5px 10px #888888;
+}
+
+.carousel img:hover { transform: scale(1.1); }
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.techparams {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    line-height: 32px;
+}
+
+.techparams .label {
+    font-weight: bold;
+}
+
+.techparams .label:after {
+    content: ':'
+}
+
+.features {
+    display: grid;
+    grid-template-columns: auto auto;
+}

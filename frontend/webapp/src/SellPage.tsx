@@ -1,7 +1,7 @@
 import React from 'react'
 
-function Sell() {
+function SellPage() {
     return (<>not implemented...</>)
 }
 
-export default Sell
+export default SellPage

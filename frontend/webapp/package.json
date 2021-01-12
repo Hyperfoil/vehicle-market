@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@patternfly/patternfly": "^4.70.2",
     "@patternfly/react-core": "^4.84.4",
     "@testing-library/jest-dom": "^5.11.4",
@@ -10,6 +13,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/react-router-dom": "^5.1.7",
     "history": "^5.0.0",
+    "pure-react-carousel": "^1.27.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",

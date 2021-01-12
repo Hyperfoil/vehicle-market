@@ -19,44 +19,44 @@ import javax.persistence.Table;
 public class VehicleOffer {
    @Id
    @GeneratedValue
-   private Long id;
+   public Long id;
 
    @ManyToOne(optional = false)
    @JoinColumn(name="DESCRIPTION_ID")
-   VehicleDescription model;
+   public VehicleDescription model;
 
    // Base, Economy, Caravelle, Chick Magnet...
    @Column
-   String trimLevel;
+   public String trimLevel;
 
    @Column(nullable = false)
-   private long mileage;
+   public long mileage;
 
    @Column(nullable = false)
-   private int manufactureYear;
+   public int year;
 
    @Column(nullable = false)
-   private String colorDescription;
+   public String colorDescription;
 
    // this is for the dummy car image color
    @Column(nullable = false)
-   private String rgbColor;
+   public String rgbColor;
 
    @Column
-   private int prevOwners;
+   public int prevOwners;
 
    @Column
-   private Date inspectionValidUntil;
+   public Date inspectionValidUntil;
 
    // bought in country, service book...
    @Column
-   private String history;
+   public String history;
 
    // those from VehicleFeatures class
    @ElementCollection
-   Collection<String> features;
+   public Collection<String> features;
 
    // identifiers for image paths
    @ElementCollection
-   Collection<String> gallery;
+   public Collection<String> gallery;
 }

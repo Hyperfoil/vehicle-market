@@ -1,0 +1,71 @@
+#offerings {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: [image] 300px [ description] auto [prices] 200px;
+    grid-column-gap: 0;
+    grid-row-gap: 10px;
+}
+
+#offerings div {
+    cursor: pointer;
+}
+
+
+.offeringimage {
+    background: rgb(96,96,96);
+    background: linear-gradient(0deg, rgba(96,96,96,1) 0%, rgba(232,232,232,1) 100%);
+    grid-column: image;
+    height: 220px;
+
+}
+
+.offeringdesc {
+    grid-column: description;
+    background-color: var(--theme-color-super-light);
+    padding: 10px;
+    position: relative;
+}
+
+.offeringdesc h3 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.offeringprices {
+    grid-column: prices;
+    background-color: var(--theme-color-super-light);
+    padding: 10px;
+    border-left: 1px solid #CCC;
+    text-align: right;
+    line-height: 40px;
+}
+
+.offeringshadow {
+    grid-column: 1 / 4;
+    box-shadow: 5px 5px 10px #888888;
+}
+
+.offeringdetails {
+    display: grid;
+    grid-template: auto auto / auto auto;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.offeringdetails div svg {
+    margin-right: 10px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.price.total {
+    color: red;
+}
+
+.price.installment {
+    color: var(--theme-color-base)
+}
