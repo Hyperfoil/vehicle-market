@@ -82,10 +82,10 @@ function OfferingPage() {
                 <Tab eventKey={'EXTERIOR'} title={<TabTitleText>Exterior</TabTitleText>} />
                 }
                 { hasFeature(offering, 'SAFETY') &&
-                <Tab eventKey={3} title={<TabTitleText>Safety</TabTitleText>} />
+                <Tab eventKey={'SAFETY'} title={<TabTitleText>Safety</TabTitleText>} />
                 }
                 { hasFeature(offering, 'OTHER') &&
-                <Tab eventKey={4} title={<TabTitleText>Extra</TabTitleText>} />
+                <Tab eventKey={'OTHER'} title={<TabTitleText>Extra</TabTitleText>} />
                 }
             </Tabs>
             { !!features && <div className="features">
