@@ -79,7 +79,7 @@ public class FuelEconomyLoader {
         description.setVClass(record.get("VClass"));
         description.setYear(Integer.parseInt(record.get("year")));
 
-        repository.save(description);
+        repository.addVehicle(description);
     }
 
 }
