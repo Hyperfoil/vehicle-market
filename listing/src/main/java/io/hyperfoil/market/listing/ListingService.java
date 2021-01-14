@@ -31,18 +31,18 @@ public class ListingService {
     private static final Offering O2 = new Offering();
 
     static {
-        VehicleDescription d1 = new VehicleDescription();
-        d1.setId(1L);
-        d1.setMake("ACME Cars");
-        d1.setModel("Fooryon");
-        d1.setYear(2018);
-        d1.setTrany("Manual 6-speed");
-        d1.setDrive("Front-Wheel Drive");
-        d1.setEngine("2.0 CDTi, 123kW");
-        d1.setVClass("hatchback");
-        d1.setFuel("Diesel");
-        d1.setSeats(5);
-        d1.setEmissions("EURO6a");
+        VehicleDescription d1 = new VehicleDescription(
+                "ACME Cars",
+                "Fooryon",
+                2018,
+                "Manual 6-speed",
+                "Front-Wheel Drive",
+                "2.0 CDTi, 123kW",
+                "hatchback",
+                "Diesel",
+                5,
+                "EURO6a"
+        );
 
         O1.id = 1L;
         O1.model = d1;
@@ -56,17 +56,18 @@ public class ListingService {
         O1.gallery.add(new GalleryItem("/images/car?type=hatchback&color=%23b52828", "Front image"));
         O1.gallery.add(new GalleryItem("/images/car?type=sedan&color=%23b52828", "Front image"));
 
-        VehicleDescription d2 = new VehicleDescription();
-        d2.setId(2L);
-        d2.setMake("Diabolico");
-        d2.setModel("Daredevil");
-        d2.setYear(2012);
-        d2.setTrany("Automatic 666-speed");
-        d2.setDrive("Rear-Wheel Drive");
-        d2.setEngine("4.0, 666kW");
-        d2.setVClass("Supercar");
-        d2.setFuel("Gasoline");
-        d2.setSeats(1);
+        VehicleDescription d2 = new VehicleDescription(
+                "Diabolico",
+                "Daredevil",
+                2012,
+                "Automatic 666-speed",
+                "Rear-Wheel Drive",
+                "4.0, 666kW",
+                "Supercar",
+                "Gasoline",
+                1,
+                "EURO1a"
+        );
 
         O2.id = 2L;
         O2.model = d2;
