@@ -36,7 +36,7 @@ Automated scripts for building, spinning up and terminating microservices in ben
 
 ## Benchmark Application Services
 
-### Vehicle discovery service :red_circle:
+### Vehicle discovery service :green_circle:
 A read-only service that provides a single point of contact regarding all available vehicles in the market. 
 
 ### User/Trader service :red_circle:

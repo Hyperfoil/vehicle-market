@@ -9,8 +9,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +51,7 @@ public class VehicleDiscoveryService {
      * @return A response object containing a list of models.
      */
     @GET
-    @Path("/byMake/{make}")
+    @Path("/models/{make}")
     public Response getModels(@PathParam("make") String make) {
         try {
             return Response.ok(repository.getModels(make)).build();
@@ -156,5 +158,23 @@ public class VehicleDiscoveryService {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
-    
+
+    /**
+     * Searches for a vehicle or list of vehicles from provided search criteria.
+     * The search criteria is passed in as query parameters to the REST service.
+     * All of the search parameters are optional
+     *
+     * @return A response object containing a list of of vehicles.
+     */
+    @GET
+    @Path("search")
+    public Response search(@Context UriInfo info) {
+        try {
+            return Response.ok(repository.search(info.getQueryParameters())).build();
+        }
+        catch (Exception e) {
+            logger.log(Level.SEVERE,"Error retrieving the list of vehicles ", e);
+            return Response.serverError().build();
+        }
+    }
 }

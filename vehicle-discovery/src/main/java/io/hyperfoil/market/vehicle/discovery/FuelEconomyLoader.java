@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.logging.Logger;
 
-@Path("/vehicle")
+@Path("/vehicle-loader")
 @RequestScoped
 public class FuelEconomyLoader {
     private static final Logger logger = Logger.getLogger(VehicleDiscoveryService.class.getName());
@@ -31,7 +31,7 @@ public class FuelEconomyLoader {
      */
     @GET
     @Transactional
-    @Path("/load-local")
+    @Path("/local")
     public Response loadLocal() throws IOException {
         logger.info("Loading database from local CSV file");
 
@@ -45,7 +45,7 @@ public class FuelEconomyLoader {
     @GET
     @Transactional
     @TransactionConfiguration(timeout = 600) // TODO: quarkus specific
-    @Path("/load-remote")
+    @Path("/remote")
     public Response loadRemote() throws IOException {
         String url = "https://www.fueleconomy.gov/feg/epadata/vehicles.csv"; // TODO: store in config
         logger.info("Loading database from remote CSV file in URL: " + url);
@@ -57,29 +57,24 @@ public class FuelEconomyLoader {
     private void loadStream(InputStream stream) throws IOException {
         int i = 0;
         for (CSVRecord record : CSVFormat.DEFAULT.withHeader().parse(new InputStreamReader(stream))) {
-            loadRecord(record);
+            repository.addVehicle(new VehicleDescription(
+                    record.get("make"),
+                    record.get("model"),
+                    Integer.parseInt(record.get("year")),
+                    record.get("trany"),
+                    record.get("drive"),
+                    record.get("engId") + ": " + record.get("displ") + "l " + record.get("cylinders") + " cylinders",
+                    record.get("VClass"),
+                    record.get("fuelType1"),
+                    0,
+                    record.get("co2TailpipeGpm")
+            ));
 
-            if (++i % 100 == 0) {
+            if (++i % 1000 == 0) {
                 logger.info("Processed " + i);
             }
         }
         logger.info("Processed a total of " + i + " vehicle descriptions");
-    }
-
-    private void loadRecord(CSVRecord record) {
-        VehicleDescription description = new VehicleDescription();
-
-        description.setDrive(record.get("drive"));
-        description.setEmissions(record.get("co2TailpipeGpm") + " grams/mile");
-        description.setEngine(record.get("engId") + ": " + record.get("displ") + "l " + record.get("cylinders") + " cylinders");
-        description.setFuel(record.get("fuelType"));
-        description.setMake(record.get("make"));
-        description.setModel(record.get("model"));
-        description.setTrany(record.get("trany"));
-        description.setVClass(record.get("VClass"));
-        description.setYear(Integer.parseInt(record.get("year")));
-
-        repository.addVehicle(description);
     }
 
 }

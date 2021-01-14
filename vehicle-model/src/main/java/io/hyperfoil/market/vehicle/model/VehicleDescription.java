@@ -61,13 +61,29 @@ public class VehicleDescription {
     public static final String QUERY_COUNT = "VehicleDescription.getCount";
     public static final String QUERY_GET_VD_BY_IDS = "VehicleDescription.getVdByIds";
     public static final String QUERY_BY_CATEGORY = "VehicleDescription.distinctCategory";
-    public static final String QUERY_BY_MAKE = "VehicleDescription.byMake";
     public static final String DISTINCT_YEARS = "VehicleDescription.distinctYears";
     public static final String DISTINCT_TRANSMISSIONS = "VehicleDescription.distinctTransmissions";
     public static final String DISTINCT_DRIVERTRAIN = "VehicleDescription.distinctDrivetrain";
     public static final String DISTINCT_VCLASS = "VehicleDescription.distinctVClass";
     public static final String DISTINCT_MAKES = "VehicleDescription.distinctMakes";
     public static final String DISTINCT_MODELS = "VehicleDescription.distinctModels";
+
+    public VehicleDescription() {
+        // no-args constructor required by JPA
+    }
+
+    public VehicleDescription(String make, String model, int year, String trany, String drive, String engine, String vClass, String fuel, int seats, String emissions) {
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.trany = trany;
+        this.drive = drive;
+        this.engine = engine;
+        this.vClass = vClass;
+        this.fuel = fuel;
+        this.seats = seats;
+        this.emissions = emissions;
+    }
 
     @Id
     @GeneratedValue
@@ -105,93 +121,4 @@ public class VehicleDescription {
     @Column(nullable = false)
     private String emissions;
 
-    // --- //
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMake() {
-        return make;
-    }
-
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getTrany() {
-        return trany;
-    }
-
-    public void setTrany(String trany) {
-        this.trany = trany;
-    }
-
-    public String getDrive() {
-        return drive;
-    }
-
-    public void setDrive(String drive) {
-        this.drive = drive;
-    }
-
-    public String getEngine() {
-        return engine;
-    }
-
-    public void setEngine(String engine) {
-        this.engine = engine;
-    }
-
-    public String getVClass() {
-        return vClass;
-    }
-
-    public void setVClass(String vClass) {
-        this.vClass = vClass;
-    }
-
-    public String getFuel() {
-        return fuel;
-    }
-
-    public void setFuel(String fuel) {
-        this.fuel = fuel;
-    }
-
-    public int getSeats() {
-        return seats;
-    }
-
-    public void setSeats(int seats) {
-        this.seats = seats;
-    }
-
-    public String getEmissions() {
-        return emissions;
-    }
-
-    public void setEmissions(String emissions) {
-        this.emissions = emissions;
-    }
 }
