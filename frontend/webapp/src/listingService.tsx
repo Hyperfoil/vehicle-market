@@ -39,3 +39,7 @@ export function fetchOfferings(page: number, perPage: number): Promise<Offering[
 export function fetchOfferingById(id: number): Promise<Offering> {
     return fetch(BASE_URL + "/offering/" + id).then(res => res.json())
 }
+
+export function fetchAllFeatures(): Promise<Feature[]> {
+    return fetch(BASE_URL + "/allfeatures").then(res => res.json())
+}

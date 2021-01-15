@@ -3,6 +3,7 @@ package io.hyperfoil.market.listing;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
@@ -15,6 +16,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.cache.Cache;
 
 import io.hyperfoil.market.listing.client.GalleryItem;
 import io.hyperfoil.market.listing.client.Offering;
@@ -93,4 +95,10 @@ public class ListingService {
         throw new WebApplicationException(404);
     }
 
+    @GET
+    @Path("/allfeatures")
+    @Cache
+    public List<VehicleFeature> allFeatures() {
+        return VehicleFeature.ALL;
+    }
 }

@@ -1,4 +1,7 @@
 import CONFIG from './config'
+import { Feature } from './listingService';
+
+const BASE_URL = (CONFIG ? CONFIG.discoveryUrl : "") + "/vehicle";
 
 // Maps to io.hyperfoil.market.vehicle.model.VehicleDescription
 export type VehicleDescription = {
@@ -13,4 +16,12 @@ export type VehicleDescription = {
     fuel: string,
     seats: number,
     emissions: string;
+}
+
+export function fetchMakes(): Promise<string[]> {
+    return fetch(BASE_URL + "/makes").then(res => res.json())
+}
+
+export function fetchModels(make: string): Promise<string[]> {
+    return fetch(BASE_URL + "/byMake/" + make).then(res => res.json())
 }
