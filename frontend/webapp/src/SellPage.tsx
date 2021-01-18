@@ -3,8 +3,10 @@ import {
     Bullseye,
     Button,
     Checkbox,
+    DatePicker,
     Form,
     FormGroup,
+    Spinner,
     Tab,
     Tabs,
     TabTitleText,
@@ -17,28 +19,43 @@ import MakeSelect from './components/MakeSelect'
 import ModelSelect from './components/ModelSelect'
 import NumberSelect from './components/NumberSelect'
 import SimpleSelect from './components/SimpleSelect'
-import { fetchAllFeatures, FeatureCategory, Feature, Offering } from './listingService'
+import { fetchAllFeatures, publishOffering, FeatureCategory, Feature, Offering, PartialOffering } from './listingService'
 import { VehicleDescription } from './discoveryService'
 import './SellPage.css'
-
-type PartialOffering = Partial<Omit<Offering, "model"> & { model: Partial<VehicleDescription> }>
+import { ContactInfo } from './userService'
 
 type DescriptionProps = {
     offering: PartialOffering,
     onChange(o: PartialOffering): void,
 }
 
+function pad(x: number): string {
+    return x >= 10 ? x.toString() : "0" + x;
+}
+
+function formatDate(d: Date): string {
+    console.log(d)
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+}
+
+function parseDate(value: string): Date {
+    const parts = value.split("-")
+    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
+}
+
 function Description(props: DescriptionProps) {
     const o = props.offering
+    // TODO: more validations than just mileage
     const [valid, setValid] = useState<Partial<Record<keyof Offering, boolean>>>({ mileage: true })
     const [allFeatures, setAllFeatures] = useState<Feature[]>()
     useEffect(() => {
         fetchAllFeatures().then(fs => setAllFeatures(fs))
     }, [])
     const [activeFeatureTab, setActiveFeatureTab] = useState<FeatureCategory>('INTERIOR')
+    const [inspectionValid, setInspectionValid] = useState<boolean>(!!o.inspectionValidUntil)
     return (
-        <Form isHorizontal>
-            {/* <FormGroup fieldId="make" label="Make" isRequired>
+        <Form isHorizontal >
+            <FormGroup fieldId="make" label="Make" isRequired>
                 <MakeSelect
                     make={ o.model?.make }
                     onChange={ make => props.onChange({ ...o, model: { ...o.model, make} }) }/>
@@ -59,6 +76,7 @@ function Description(props: DescriptionProps) {
             </FormGroup>
             <FormGroup fieldId="trimLevel" label="Trim level">
                 <TextInput
+                    id="trimLevel"
                     value={ o.trimLevel }
                     onChange={ trimLevel => props.onChange({ ...o, trimLevel }) }
                     />
@@ -71,6 +89,7 @@ function Description(props: DescriptionProps) {
             </FormGroup>
             <FormGroup fieldId="color" label="Color" isRequired>
                 <TextInput
+                    id="color"
                     value={ o.color }
                     onChange={ color => props.onChange({ ...o, color }) }
                     />
@@ -95,15 +114,28 @@ function Description(props: DescriptionProps) {
                     value={ o.prevOwners !== undefined ? prevOwnersNumberToString(o.prevOwners) : undefined }
                     onChange={ prev => props.onChange({ ...o, prevOwners: prevOwnersToNumber(prev.toString()) })}
                     options={["unknown", "0", "1", "2", "3", "more"]} />
-            </FormGroup> */}
+            </FormGroup>
             <FormGroup fieldId="inspectionValidUntil" label="Inspection valid until" >
-                <TextInput
+                <Checkbox
+                    id="inspectionValid"
+                    label="valid"
+                    isChecked={ inspectionValid }
+                    onChange={ valid => {
+                        setInspectionValid(valid)
+                        if (!valid) props.onChange({ ...o, inspectionValidUntil: undefined })
+                    }} />
+                <DatePicker
                     id="inspectionValidUntil"
                     placeholder="yyyy-mm-dd"
-                    value={ o.inspectionValidUntil?.toDateString() }
-                    onChange={ date => props.onChange({ ...o, inspectionValidUntil: new Date(date) })} />
-                {/* TODO use datepicker, but it crashes somehow */}
-                {/* <DatePicker onChange={(str, date) => console.log('onChange', str, date)} /> */}
+                    isDisabled={!inspectionValid}
+                    value={ o.inspectionValidUntil ? formatDate(o.inspectionValidUntil) : undefined }
+                    dateParse={ parseDate }
+                    onClick={ e => e.preventDefault() }
+                    onChange={ (text, date) => {
+                        if (/\d\d\d\d-\d\d-\d\d/.test(text)) {
+                            props.onChange({ ...o, inspectionValidUntil: date })
+                        }
+                    }} />
             </FormGroup>
             <FormGroup fieldId="history" label="History" >
                 <TextInput
@@ -112,34 +144,37 @@ function Description(props: DescriptionProps) {
                     onChange={ history => props.onChange({ ...o, history })} />
             </FormGroup>
             <FormGroup fieldId="features" label="Features">
-                <Tabs activeKey={activeFeatureTab} onSelect={(_, key) => setActiveFeatureTab(key as FeatureCategory) } >
-                    <Tab eventKey={'INTERIOR'} title={<TabTitleText>Interior</TabTitleText>} />
-                    <Tab eventKey={'INFOTAINMENT'} title={<TabTitleText>Infotainment</TabTitleText>} />
-                    <Tab eventKey={'EXTERIOR'} title={<TabTitleText>Exterior</TabTitleText>} />
-                    <Tab eventKey={'SAFETY'} title={<TabTitleText>Safety</TabTitleText>} />
-                    <Tab eventKey={'OTHER'} title={<TabTitleText>Extra</TabTitleText>} />
+                <Tabs activeKey={activeFeatureTab} onSelect={(e, key) => {
+                    e.preventDefault()
+                    setActiveFeatureTab(key as FeatureCategory)
+                 }} >
+                    <Tab key={0} eventKey={'INTERIOR'} title={<TabTitleText>Interior</TabTitleText>} />
+                    <Tab key={1} eventKey={'INFOTAINMENT'} title={<TabTitleText>Infotainment</TabTitleText>} />
+                    <Tab key={2} eventKey={'EXTERIOR'} title={<TabTitleText>Exterior</TabTitleText>} />
+                    <Tab key={3} eventKey={'SAFETY'} title={<TabTitleText>Safety</TabTitleText>} />
+                    <Tab key={4} eventKey={'OTHER'} title={<TabTitleText>Extra</TabTitleText>} />
                 </Tabs>
-                <Button onClick={() => setActiveFeatureTab('EXTERIOR')}>touch me</Button>
                 <div className="featureTabs">
-                { /*
+                {
                     allFeatures?.filter(f => f.category === activeFeatureTab ).map(f => <Checkbox
-                            isChecked={ o.features?.includes(f)}
-                            id={ f.id }
-                            onChange={ checked => {
-                                var newFeatures = o.features || []
-                                if (checked) {
-                                    newFeatures = [ ...newFeatures, f]
-                                } else {
-                                    const index = newFeatures.indexOf(f)
-                                    if (index >= 0) {
-                                        newFeatures = newFeatures.splice(index, 1);
-                                    }
+                        key={ f.id }
+                        isChecked={ o.features?.includes(f)}
+                        id={ f.id }
+                        onChange={ checked => {
+                            var newFeatures = o.features || []
+                            if (checked) {
+                                newFeatures = [ ...newFeatures, f]
+                            } else {
+                                const index = newFeatures.indexOf(f)
+                                if (index >= 0) {
+                                    newFeatures.splice(index, 1);
                                 }
-                                props.onChange({ ...o, features: newFeatures })
-                            }}
-                            label={f.description ? <Tooltip content={f.description}><>{ f.name }</></Tooltip> : f.name}
-                        />)
-                        */ }
+                            }
+                            props.onChange({ ...o, features: newFeatures })
+                        }}
+                        label={f.description ? <Tooltip content={f.description}><>{ f.name }</></Tooltip> : f.name}
+                    />)
+                }
                 </div>
             </FormGroup>
         </Form>
@@ -166,36 +201,109 @@ function prevOwnersToNumber(prev: string): number {
     }
 }
 
-function Finished() {
+type ContactProps = {
+    contactInfo: Partial<ContactInfo>,
+    onChange(contactInfo: Partial<ContactInfo>): void,
+}
+
+function Contact(props: ContactProps) {
+    const c = props.contactInfo
+    return (
+        <Form isHorizontal>
+            <FormGroup fieldId="firstName" label="First name" isRequired>
+                <TextInput
+                    id="firstName"
+                    value={ c.firstName }
+                    onChange={ firstName => props.onChange({ ...c, firstName })}
+                />
+            </FormGroup>
+            <FormGroup fieldId="lastName" label="Last name" isRequired>
+                <TextInput
+                    id="lastName"
+                    value={ c.lastName }
+                    onChange={ lastName => props.onChange({ ...c, lastName })}
+                />
+            </FormGroup>
+            <FormGroup fieldId="email" label="E-mail" isRequired>
+                { /* TODO validation */ }
+                <TextInput
+                    id="email"
+                    value={ c.email }
+                    onChange={ email => props.onChange({ ...c, email })}
+                />
+            </FormGroup>
+            <FormGroup fieldId="phone" label="Phone number" isRequired>
+                <TextInput
+                    id="phone"
+                    value={ c.phone }
+                    onChange={ phone => props.onChange({ ...c, phone })}
+                />
+            </FormGroup>
+        </Form>
+    )
+}
+
+type FinishedProps = {
+    completed: boolean,
+    failed: boolean,
+}
+
+function Finished(props: FinishedProps) {
     const history = useHistory();
     return (
-        <Bullseye>
-            Thank you!
-            <Button onClick={() => history.push("/")}>Go to main page</Button>
+        <Bullseye style={{ minHeight: "400px"}}>
+            { props.completed &&
+            <div style={{ textAlign: "center"}}>
+                { props.failed ? "Sorry, there was an error :-/" : "Thank you!" }<br />
+                <Button onClick={() => history.push("/")}>Go to main page</Button>
+            </div>
+            }
+            { !props.completed &&
+                <Spinner />
+            }
         </Bullseye>
     )
 }
 
 function SellPage() {
     const [offering, setOffering] = useState<PartialOffering>({})
-    return (<Description offering={offering} onChange={setOffering} />)
-    // return (<Wizard
-    //     navAriaLabel="Sell vehicle steps"
-    //     mainAriaLabel="Sell vehicle content"
-    //     steps={[ {
-    //         id: 'description',
-    //         name: "Vehicle description",
-    //         component: <Description offering={offering} onChange={setOffering} />,
-    //     }, {
-    //         id: 'contact',
-    //         name: "Contact",
-    //         nextButtonText: "Post offering",
-    //     }, {
-    //         id: 'finished',
-    //         name: "Finished",
-    //         component: <Finished />,
-    //     } ]}
-    // />)
+    const [contactInfo, setContactInfo] = useState<Partial<ContactInfo>>({})
+    const [completed, setCompleted] = useState(false)
+    const [failed, setFailed] = useState(false)
+    return (<Wizard
+        navAriaLabel="Sell vehicle steps"
+        mainAriaLabel="Sell vehicle content"
+        steps={[ {
+            id: 'description',
+            name: "Vehicle description",
+            component: <Description offering={offering} onChange={setOffering} />,
+            stepNavItemProps: {
+
+            }
+        }, {
+            id: 'contact',
+            name: "Contact",
+            component: <Contact contactInfo={contactInfo} onChange={setContactInfo} />,
+            nextButtonText: <>Publish your offering</>,
+        }, {
+            id: 'finished',
+            name: "Finished",
+            isFinishedStep: true,
+            component: <Finished completed={ completed} failed={failed} />,
+        } ]}
+        onNext={({ id }) => {
+            if (id === 'finished') {
+                publishOffering(offering, contactInfo).then(res => {
+                    if (res.status >= 200 && res.status < 300) {
+                        setCompleted(true)
+                    } else {
+                        setFailed(true)
+                        setCompleted(true)
+                    }
+                }, _ => setFailed(true))
+            }
+        }}
+    />)
 }
 
 export default SellPage

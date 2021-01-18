@@ -8,6 +8,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,6 +21,7 @@ import org.jboss.resteasy.annotations.cache.Cache;
 
 import io.hyperfoil.market.listing.client.GalleryItem;
 import io.hyperfoil.market.listing.client.Offering;
+import io.hyperfoil.market.listing.client.UnauthorizedOffering;
 import io.hyperfoil.market.vehicle.model.VehicleDescription;
 import io.hyperfoil.market.vehicle.model.VehicleFeature;
 
@@ -93,6 +95,12 @@ public class ListingService {
         if (id == 1) return O1;
         if (id == 2) return O2;
         throw new WebApplicationException(404);
+    }
+
+    @POST
+    @Path("/offering")
+    public void create(UnauthorizedOffering requestBody) {
+        log.info("Received new offering");
     }
 
     @GET

@@ -1,5 +1,4 @@
 import CONFIG from './config'
-import { Feature } from './listingService';
 
 const BASE_URL = (CONFIG ? CONFIG.discoveryUrl : "") + "/vehicle";
 
@@ -18,10 +17,20 @@ export type VehicleDescription = {
     emissions: string;
 }
 
+const DESCRIPTION_FIELDS = [ "id", "make", "model", "year", "trany", "drive", "engine",
+    "vClass", "fuel", "seats", "emissions" ]
+
+export function validateVehicleDescription(d: Partial<VehicleDescription>) {
+    for (var f in DESCRIPTION_FIELDS) {
+        if (d[f as (keyof VehicleDescription)] === undefined) return f
+    }
+    return undefined
+}
+
 export function fetchMakes(): Promise<string[]> {
     return fetch(BASE_URL + "/makes").then(res => res.json())
 }
 
 export function fetchModels(make: string): Promise<string[]> {
-    return fetch(BASE_URL + "/byMake/" + make).then(res => res.json())
+    return fetch(BASE_URL + "/models/" + make).then(res => res.json())
 }

@@ -1,5 +1,6 @@
 import CONFIG from './config'
 import { VehicleDescription } from './discoveryService'
+import { ContactInfo } from './userService';
 
 const BASE_URL = CONFIG ? CONFIG.listingUrl : "";
 
@@ -12,11 +13,13 @@ export type Offering = {
     year: number,
     color: string,
     prevOwners: number,
-    inspectionValidUntil: Date,
+    inspectionValidUntil?: Date,
     history: string,
     features: Feature[],
     gallery: GalleryItem[],
 }
+
+export type PartialOffering = Partial<Omit<Offering, "model"> & { model: Partial<VehicleDescription> }>
 
 export type FeatureCategory = 'INTERIOR' | 'INFOTAINMENT' | 'EXTERIOR' | 'SAFETY' | 'OTHER';
 
@@ -42,4 +45,12 @@ export function fetchOfferingById(id: number): Promise<Offering> {
 
 export function fetchAllFeatures(): Promise<Feature[]> {
     return fetch(BASE_URL + "/allfeatures").then(res => res.json())
+}
+
+export function publishOffering(offering: PartialOffering, contactInfo: Partial<ContactInfo>): Promise<Response> {
+    return fetch(BASE_URL + "/offering", {
+        method: 'POST',
+        body: JSON.stringify({ offering, contactInfo }),
+        headers: { "content-type" : "application/json" }
+    })
 }
