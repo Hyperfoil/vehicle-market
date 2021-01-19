@@ -50,6 +50,14 @@ export function getUserToken(): string | undefined {
     return token === null ? undefined : token;
 }
 
+export function appendToken(headers: Record<string, string>) {
+    const token = sessionStorage.getItem(USER_TOKEN)
+    if (token) {
+        headers.authorization = "Bearer " + token;
+    }
+    return headers;
+}
+
 export function fetchUserInfo(token: string): Promise<UserInfo> {
     return fetch(BASE_URL + "/info?token=" + encodeURIComponent(token)).then(res => res.json())
 }

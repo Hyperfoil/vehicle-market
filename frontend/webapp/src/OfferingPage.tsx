@@ -28,6 +28,7 @@ function OfferingPage() {
     if (!offering) {
         return <Bullseye><Spinner /></Bullseye>
     }
+    console.log(features)
     return <div className="offering">
         { /* TODO: use proper carousel */ }
         <div className="carousel">
@@ -66,6 +67,7 @@ function OfferingPage() {
                 <span>{ offering.inspectionValidUntil }</span>
                 </>}
             </div>
+            { features && features.length > 0 && <>
             <h3>Features</h3>
             <Tabs activeKey={activeFeatureTab} onSelect={(_, key) => setActiveFeatureTab(key as FeatureCategory) } >
                 { hasFeature(offering, 'INTERIOR') &&
@@ -84,12 +86,13 @@ function OfferingPage() {
                 <Tab eventKey={'OTHER'} title={<TabTitleText>Extra</TabTitleText>} />
                 }
             </Tabs>
-            { !!features && <div className="features">
+            <div className="features">
                 { features.map((f, i) => f.description ?
                     <Tooltip key={i} content={ f.description }>
                         <span style={{ textDecoration: "underline "}}>{ f.name }</span>
                     </Tooltip> : f.name) }
-                </div> }
+            </div>
+            </> }
         </div>
     </div>
 }

@@ -1,6 +1,6 @@
 import CONFIG from './config'
 import { VehicleDescription } from './discoveryService'
-import { ContactInfo } from './userService';
+import { ContactInfo, appendToken } from './userService';
 
 const BASE_URL = CONFIG ? CONFIG.listingUrl : "";
 
@@ -60,6 +60,8 @@ export function publishOffering(offering: PartialOffering, contactInfo: Partial<
     return fetch(BASE_URL + "/offering", {
         method: 'POST',
         body: JSON.stringify({ offering, contactInfo }),
-        headers: { "content-type" : "application/json" }
+        headers: appendToken({
+            "content-type" : "application/json",
+        }),
     })
 }

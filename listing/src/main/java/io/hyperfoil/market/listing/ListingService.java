@@ -7,6 +7,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -21,7 +22,7 @@ import org.jboss.resteasy.annotations.cache.Cache;
 import io.hyperfoil.market.listing.client.GalleryItem;
 import io.hyperfoil.market.listing.client.Offering;
 import io.hyperfoil.market.listing.client.OfferingList;
-import io.hyperfoil.market.listing.client.UnauthorizedOffering;
+import io.hyperfoil.market.listing.client.OfferingAndContactInfo;
 import io.hyperfoil.market.vehicle.model.VehicleDescription;
 import io.hyperfoil.market.vehicle.model.VehicleFeature;
 
@@ -99,9 +100,15 @@ public class ListingService {
 
     @POST
     @Path("/offering")
-    public void create(UnauthorizedOffering requestBody) {
-        log.info("Received new offering");
+    public void create(@HeaderParam("authorization") String authorization, OfferingAndContactInfo requestBody) {
+        String token = null;
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            token = authorization.substring("Bearer ".length());
+        }
+        // TODO fetch data from user service and fill in contact details automatically
+        log.info("Received new offering, token: " + token);
     }
+
 
     @GET
     @Path("/allfeatures")

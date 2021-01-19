@@ -13,6 +13,7 @@ import {
     TextInput,
     Tooltip,
     Wizard,
+    WizardStep,
 } from '@patternfly/react-core'
 import { useHistory } from 'react-router'
 import MakeSelect from './components/MakeSelect'
@@ -21,7 +22,7 @@ import NumberSelect from './components/NumberSelect'
 import SimpleSelect from './components/SimpleSelect'
 import { fetchAllFeatures, publishOffering, FeatureCategory, Feature, Offering, PartialOffering } from './listingService'
 import './SellPage.css'
-import { ContactInfo } from './userService'
+import { ContactInfo, getUserToken } from './userService'
 
 type DescriptionProps = {
     offering: PartialOffering,
@@ -269,27 +270,31 @@ function SellPage() {
     const [contactInfo, setContactInfo] = useState<Partial<ContactInfo>>({})
     const [completed, setCompleted] = useState(false)
     const [failed, setFailed] = useState(false)
-    return (<Wizard
-        navAriaLabel="Sell vehicle steps"
-        mainAriaLabel="Sell vehicle content"
-        steps={[ {
-            id: 'description',
-            name: "Vehicle description",
-            component: <Description offering={offering} onChange={setOffering} />,
-            stepNavItemProps: {
-
-            }
-        }, {
+    const token = getUserToken();
+    const steps: WizardStep[] = [{
+        id: 'description',
+        name: "Vehicle description",
+        component: <Description offering={offering} onChange={setOffering} />,
+        nextButtonText: token ? <>Publish your offering</> : undefined,
+    }];
+    if (!token) {
+        steps.push({
             id: 'contact',
             name: "Contact",
             component: <Contact contactInfo={contactInfo} onChange={setContactInfo} />,
             nextButtonText: <>Publish your offering</>,
-        }, {
-            id: 'finished',
-            name: "Finished",
-            isFinishedStep: true,
-            component: <Finished completed={ completed} failed={failed} />,
-        } ]}
+        })
+    }
+    steps.push({
+        id: 'finished',
+        name: "Finished",
+        isFinishedStep: true,
+        component: <Finished completed={ completed} failed={failed} />,
+    })
+    return (<Wizard
+        navAriaLabel="Sell vehicle steps"
+        mainAriaLabel="Sell vehicle content"
+        steps={steps}
         onNext={({ id }) => {
             if (id === 'finished') {
                 publishOffering(offering, contactInfo).then(res => {
