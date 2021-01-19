@@ -1,4 +1,3 @@
-import React from 'react'
 import CONFIG from './config'
 
 const BASE_URL = (CONFIG ? CONFIG.userUrl : "");
@@ -26,7 +25,7 @@ export function login(username: string, password: string): Promise<void> {
         },
         body: form
     }).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
             return res.text().then(token => sessionStorage.setItem(USER_TOKEN, token));
         } else {
             throw new Error("Login failure")

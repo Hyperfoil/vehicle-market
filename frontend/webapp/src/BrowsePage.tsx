@@ -12,8 +12,8 @@ import './BrowsePage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCar, faCogs, faGasPump, faTachometerAlt } from '@fortawesome/free-solid-svg-icons'
 
-function addComma(element: any, add: boolean) {
-    return add ? <>{ element }, </> : element;
+function addComma(key: any, element: any, add: boolean) {
+    return add ? <React.Fragment key={key}>{ element }, </React.Fragment> : element;
 }
 
 function BrowsePage() {
@@ -29,12 +29,13 @@ function BrowsePage() {
     }
     return (<>
     <div id="offerings">
-        { offerings.items.map((o, i) => <>
+        { offerings.items.map((o, i) => <React.Fragment key={i}>
             <div
                 className="offeringshadow"
                 style={{ gridRow: i + 1}}
             />
             <img
+                alt={ o.model.make + " " + o.model.model }
                 className="offeringimage"
                 style={{ gridRow: i + 1}}
                 src={ o.gallery.length > 0 ? o.gallery[0].url : "/nocar.svg" }
@@ -47,9 +48,9 @@ function BrowsePage() {
             >
                 <h3>{ o.model.make } { o.model.model }, { o.year }</h3>
                 { o.history && <>{ o.history }<br /></> }
-                { o.features.slice(0, 8).map((f, j) => addComma(f.description ?
-                    <Tooltip content={ f.description }><span style={{ textDecoration: "underline "}}>{ f.name }</span></Tooltip>
-                    : f.name, j < Math.min(o.features.length, 8))) }
+                { o.features.slice(0, 8).map((f, j) => addComma(j, f.description ?
+                    <Tooltip key={j} content={ f.description }><span style={{ textDecoration: "underline "}}>{ f.name }</span></Tooltip>
+                : f.name, j < Math.min(o.features.length, 8))) }
                 <div className="offeringdetails">
                     <div><FontAwesomeIcon icon={ faTachometerAlt } />{o.mileage}</div>
                     <div><FontAwesomeIcon icon={ faCogs } />{o.model.trany}</div>
@@ -67,7 +68,7 @@ function BrowsePage() {
                 Monthly installment:<br />
                 <span className="price installment">from $123</span>
             </div>
-        </>)}
+        </React.Fragment>) }
     </div>
     <Pagination
         style={{

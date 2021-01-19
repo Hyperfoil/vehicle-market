@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import 'pure-react-carousel/dist/react-carousel.es.css';
-import { FeatureCategory, fetchOfferingById, Offering, Feature } from './listingService';
+import { FeatureCategory, fetchOfferingById, Offering } from './listingService';
 import {
     Bullseye,
     Spinner,
@@ -14,10 +14,6 @@ import './OfferingPage.css'
 
 function hasFeature(offering: Offering, category: FeatureCategory) {
     return offering.features.some(f => f.category === category);
-}
-
-function listFeatures(offering: Offering, category: FeatureCategory) {
-    return offering.features.filter(f => f.category === category)
 }
 
 function OfferingPage() {
@@ -35,7 +31,7 @@ function OfferingPage() {
     return <div className="offering">
         { /* TODO: use proper carousel */ }
         <div className="carousel">
-            { offering.gallery.map((img, i) => <img src={img.url} alt={img.title} />)}
+            { offering.gallery.map((img, i) => <img key={i} src={img.url} alt={img.title} />)}
         </div>
         <div>
             <h1>{ offering.model.make } { offering.model.model }, { offering.year }</h1>
@@ -61,7 +57,7 @@ function OfferingPage() {
                 <span>{ offering.color }</span>
                 <span className="label">History</span>
                 <span>{ offering.history }</span>
-                { offering.trimLevel != "" && <>
+                { offering.trimLevel !== "" && <>
                 <span className="label">Trim level</span>
                 <span>{ offering.trimLevel }</span>
                 </>}
@@ -89,11 +85,11 @@ function OfferingPage() {
                 }
             </Tabs>
             { !!features && <div className="features">
-                { features.map(f => f.description ?
-                    <Tooltip content={ f.description }>
+                { features.map((f, i) => f.description ?
+                    <Tooltip key={i} content={ f.description }>
                         <span style={{ textDecoration: "underline "}}>{ f.name }</span>
                     </Tooltip> : f.name) }
-            </div> }
+                </div> }
         </div>
     </div>
 }

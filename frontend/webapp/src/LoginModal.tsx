@@ -39,17 +39,18 @@ function LoginModal(props: LoginModalProps) {
             showClose={ false }
             actions={[
                 <Button
+                    key="login"
                     isDisabled={ !username || username === '' || !password || password === '' }
                     onClick={ doLogin }
                 >Login</Button>,
-                <Button variant="secondary" onClick={ close }>Cancel</Button>
+                <Button key="cancel" variant="secondary" onClick={ close }>Cancel</Button>
             ] }
         >
             <Form isHorizontal>
                 <FormGroup fieldId="username" label="User name">
                     <TextInput
                         id="username"
-                        value={username}
+                        value={username || ''}
                         onChange={value => {
                             setFailed(false)
                             setUsername(value)
@@ -60,13 +61,13 @@ function LoginModal(props: LoginModalProps) {
                     <TextInput
                         id="password"
                         type="password"
-                        value={password}
+                        value={password || ''}
                         onChange={value => {
                             setFailed(false)
                             setPassword(value)
                         }}
                         onKeyPress={ e => {
-                            if (e.key == 'Enter' && username && password) {
+                            if (e.key === 'Enter' && username && password) {
                                 doLogin()
                             }
                         }}

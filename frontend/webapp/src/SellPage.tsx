@@ -20,7 +20,6 @@ import ModelSelect from './components/ModelSelect'
 import NumberSelect from './components/NumberSelect'
 import SimpleSelect from './components/SimpleSelect'
 import { fetchAllFeatures, publishOffering, FeatureCategory, Feature, Offering, PartialOffering } from './listingService'
-import { VehicleDescription } from './discoveryService'
 import './SellPage.css'
 import { ContactInfo } from './userService'
 
