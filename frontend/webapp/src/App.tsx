@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState} from 'react'
 import {
    Button,
 } from "@patternfly/react-core";
@@ -10,6 +10,9 @@ import SellPage from './SellPage'
 import OfferingPage from './OfferingPage'
 
 import './App.css';
+import LoginModal from './LoginModal';
+import UserInfo from './UserInfo'
+import { getUserToken, logout } from './userService';
 
 var prevScrollpos = window.pageYOffset;
 window.onscroll = function() {
@@ -26,6 +29,11 @@ window.onscroll = function() {
 }
 
 function App() {
+   const [loginModalOpen, setLoginModalOpen] = useState(false)
+   const [userToken, setUserToken] = useState<string>()
+   useEffect(() => {
+      setUserToken(getUserToken())
+   }, [loginModalOpen])
    return (
       <BrowserRouter>
          <header id="navbar">
@@ -35,8 +43,15 @@ function App() {
                <Link to="/sell">Sell</Link>
                <Link to="/about">About us</Link>
                <div id="loginbuttons">
-                  <Button variant="link">Login</Button>
-                  <Button variant="link">Register</Button>
+                  { userToken !== undefined && <>
+                     <UserInfo token={ userToken } />
+                     <Button variant="link" onClick={ () => logout().finally(() => setUserToken(undefined)) } >Logout</Button>
+                  </> }
+                  { userToken === undefined && <>
+                     <LoginModal isOpen={ loginModalOpen } onClose={ () => setLoginModalOpen(false) } />
+                     <Button variant="link" onClick={ () => setLoginModalOpen(true) }>Login</Button>
+                     <Button variant="link">Register</Button>
+                  </> }
                </div>
             </div>
          </header>

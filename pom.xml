@@ -9,6 +9,7 @@
   <modules>
     <module>frontend</module>
     <module>listing</module>
+    <module>user</module>
     <module>vehicle-discovery</module>
     <module>vehicle-model</module>
   </modules>

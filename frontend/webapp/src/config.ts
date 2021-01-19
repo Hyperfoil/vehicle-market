@@ -1,8 +1,9 @@
 export {}
 
 type Config = {
-    discoveryUrl: string
-    listingUrl: string
+    discoveryUrl: string,
+    listingUrl: string,
+    userUrl: string,
 }
 
 declare global {

@@ -16,12 +16,16 @@ public class ConfigService {
    @ConfigProperty(name = "listing.service.url", defaultValue = "http://localhost:8082")
    String listingServiceUrl;
 
+   @ConfigProperty(name = "user.service.url", defaultValue = "http://localhost:8083")
+   String userServiceUrl;
+
    @GET
    @Produces("text/javascript")
    public String getConfig() {
       JsonObject config = new JsonObject();
       config.put("discoveryUrl", discoveryServiceUrl);
       config.put("listingUrl", listingServiceUrl);
+      config.put("userUrl", userServiceUrl);
       return "window.vehicleMarketConfig = " + config.encodePrettily();
    }
 }
