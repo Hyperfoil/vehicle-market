@@ -87,38 +87,38 @@ public class VehicleDescription {
 
     @Id
     @GeneratedValue
-    private Long id;
+    public Long id;
 
     @Column(nullable = false)
-    private String make;
+    public String make;
 
     @Column(nullable = false)
-    private String model;
+    public String model;
 
     @Column(nullable = false)
-    private int year;
+    public int year;
 
     @Column(nullable = false)
-    private String trany;
+    public String trany;
 
     @Column(nullable = false)
-    private String drive;
+    public String drive;
 
     // displacement, type, power: 1.2 TCe, 92kW
     @Column(nullable = false)
-    private String engine;
+    public String engine;
 
     @Column(nullable = false)
-    private String vClass;
+    public String vClass;
 
     @Column(nullable = false)
-    private String fuel;
+    public String fuel;
 
     @Column(nullable = false)
-    private int seats;
+    public int seats;
 
     // EURO6...
     @Column(nullable = false)
-    private String emissions;
+    public String emissions;
 
 }
