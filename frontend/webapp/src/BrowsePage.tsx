@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import {
     Bullseye,
+    Pagination,
+    PaginationVariant,
     Spinner,
     Tooltip,
 } from '@patternfly/react-core'
 import { useHistory } from 'react-router'
-import { fetchOfferings, Offering } from './listingService'
+import { fetchOfferings, OfferingList, NO_OFFERINGS } from './listingService'
 import './BrowsePage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCar, faCogs, faGasPump, faTachometerAlt } from '@fortawesome/free-solid-svg-icons'
@@ -17,16 +19,17 @@ function addComma(element: any, add: boolean) {
 function BrowsePage() {
     const [page, setPage] = useState(0)
     const [perPage, setPerPage] = useState(10)
-    const [offerings, setOfferings] = useState<Offering[]>()
+    const [offerings, setOfferings] = useState<OfferingList>()
     useEffect(() => {
-        fetchOfferings(page, perPage).then(setOfferings).catch(_ => setOfferings([]))
-    }, [])
+        fetchOfferings(page, perPage).then(setOfferings).catch(_ => setOfferings(NO_OFFERINGS))
+    }, [page, perPage])
     const history = useHistory()
     if (!offerings) {
         return <Bullseye><Spinner /></Bullseye>
     }
-    return <div id="offerings">
-        { offerings.map((o, i) => <>
+    return (<>
+    <div id="offerings">
+        { offerings.items.map((o, i) => <>
             <div
                 className="offeringshadow"
                 style={{ gridRow: i + 1}}
@@ -66,6 +69,21 @@ function BrowsePage() {
             </div>
         </>)}
     </div>
+    <Pagination
+        style={{
+            padding: 0,
+            margin: "16px",
+            background: "none"
+        }}
+        itemCount={offerings.total}
+        perPage={offerings.perPage}
+        page={offerings.page}
+        variant={PaginationVariant.bottom}
+        onSetPage={(_, p) => setPage(p)}
+        onPerPageSelect={(_, pp) => setPerPage(pp)}
+      />
+    </>)
+
 }
 
 export default BrowsePage;

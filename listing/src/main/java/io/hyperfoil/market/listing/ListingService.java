@@ -1,7 +1,6 @@
 package io.hyperfoil.market.listing;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import org.jboss.resteasy.annotations.cache.Cache;
 
 import io.hyperfoil.market.listing.client.GalleryItem;
 import io.hyperfoil.market.listing.client.Offering;
+import io.hyperfoil.market.listing.client.OfferingList;
 import io.hyperfoil.market.listing.client.UnauthorizedOffering;
 import io.hyperfoil.market.vehicle.model.VehicleDescription;
 import io.hyperfoil.market.vehicle.model.VehicleFeature;
@@ -85,8 +85,8 @@ public class ListingService {
 
     @GET
     @Path("/list")
-    public Collection<Offering> list(@QueryParam("page") int page, @QueryParam("perPage") int perPage) {
-        return Arrays.asList(O1, O2);
+    public OfferingList list(@QueryParam("page") int page, @QueryParam("perPage") int perPage) {
+        return new OfferingList(page, perPage, 123, Arrays.asList(O1, O2));
     }
 
     @GET

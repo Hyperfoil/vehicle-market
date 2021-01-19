@@ -35,7 +35,16 @@ export type GalleryItem = {
     title: string,
 }
 
-export function fetchOfferings(page: number, perPage: number): Promise<Offering[]> {
+export type OfferingList = {
+    page: number,
+    perPage: number,
+    total: number,
+    items: Offering[],
+}
+
+export const NO_OFFERINGS: OfferingList = { page: 1, perPage: 0, total: 0, items: []};
+
+export function fetchOfferings(page: number, perPage: number): Promise<OfferingList> {
     return fetch(BASE_URL + "/list?page=" + page + "&perPage=" + perPage).then(res => res.json())
 }
 
