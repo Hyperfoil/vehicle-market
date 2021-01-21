@@ -1,63 +1,35 @@
 package io.hyperfoil.market.vehicle.model;
 
-import java.lang.reflect.Modifier;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import javax.persistence.Cacheable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
+import javax.persistence.Table;
 
-public final class VehicleFeature {
-   public static final VehicleFeature ABS = new VehicleFeature("ABS", "ABS", Category.SAFETY, "Anti-blocking system helps you not to crash.");
-   public static final VehicleFeature RAIN_SENSOR = new VehicleFeature("RAIN_SENSOR", "Rain sensor", Category.OTHER, "Turns windscreen wipers on when you least expect it.");
-   public static final VehicleFeature SPORT_SEATS = new VehicleFeature("SPORT_SEATS", "Sport seats", Category.INTERIOR, null);
-   public static final VehicleFeature STOP_START = new VehicleFeature("STOP_START", "Stop Start System", Category.INTERIOR, "Destroys your battery 2x faster.");
-   // TODO: all the gadgets!
+@Entity
+@Cacheable
+@Table(name = "V_FEATURE")
+@NamedQuery(name = VehicleFeature.QUERY_ALL, query = "SELECT vf FROM VehicleFeature vf",
+        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+public class VehicleFeature {
 
-   public static final List<VehicleFeature> ALL;
+    public static final String QUERY_ALL = "VehicleFeature.all";
 
-   static {
-      ALL = Collections.unmodifiableList(Stream.of(VehicleFeature.class.getFields())
-            .filter(f -> Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers()) && f.getType() == VehicleFeature.class)
-            .map(f -> {
-               try {
-                  return (VehicleFeature) f.get(null);
-               } catch (IllegalAccessException e) {
-                  return null;
-               }
-            }).filter(Objects::nonNull).collect(Collectors.toList()));
-   }
+    @Id
+    @GeneratedValue
+    public Long id;
 
+    // Human readable, localized...
+    @Column(nullable = false)
+    public String name;
 
-   public enum Category {
-      INTERIOR,
-      INFOTAINMENT,
-      EXTERIOR,
-      SAFETY,
-      OTHER
-   }
+    @Column(nullable = false)
+    @Enumerated
+    public VehicleFeatureCategory category;
 
-   /**
-    * Refer to {@link VehicleFeature}
-    */
-   public String id;
-
-   /**
-    * Human readable, localized...
-    */
-   public String name;
-
-   public Category category;
-
-   public String description;
-
-   public VehicleFeature() {
-   }
-
-   private VehicleFeature(String id, String name, Category category, String description) {
-      this.id = id;
-      this.category = category;
-      this.name = name;
-      this.description = description;
-   }
+    public String description;
 }

@@ -1,62 +1,80 @@
 package io.hyperfoil.market.vehicle.model;
 
-import java.util.Collection;
-import java.util.Date;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Cacheable
 @Table(name = "V_OFFER")
+@NamedQuery(name = VehicleOffer.QUERY_ALL, query = "SELECT vo FROM VehicleOffer vo")
+@NamedQuery(name = VehicleOffer.QUERY_COUNT, query = "SELECT COUNT(vd.id) FROM VehicleDescription vd")
+@NamedQuery(name = VehicleOffer.QUERY_FOR_DTO, query = "SELECT vo FROM VehicleOffer vo JOIN FETCH vo.model")
+@NamedEntityGraph(name = VehicleOffer.WITH_GALLERY, attributeNodes = @NamedAttributeNode("gallery"))
 public class VehicleOffer {
-   @Id
-   @GeneratedValue
-   public Long id;
 
-   @ManyToOne(optional = false)
-   @JoinColumn(name="DESCRIPTION_ID")
-   public VehicleDescription model;
+    public static final String QUERY_ALL = "VehicleOffer.all";
+    public static final String QUERY_COUNT = "VehicleOffer.count";
+    public static final String QUERY_FOR_DTO = "VehicleOffer.forDTO";
+    public static final String WITH_GALLERY = "VehicleOffer.withGallery";
 
-   // Base, Economy, Caravelle, Chick Magnet...
-   @Column
-   public String trimLevel;
+    @Id
+    @GeneratedValue
+    public Long id;
 
-   @Column(nullable = false)
-   public long mileage;
+    @ManyToOne(optional = false)
+    public VehicleDescription model;
 
-   @Column(nullable = false)
-   public int year;
+    // Base, Economy, Caravelle, Chick Magnet...
+    @Column
+    public String trimLevel;
 
-   @Column(nullable = false)
-   public String colorDescription;
+    @Column(nullable = false)
+    public long mileage;
 
-   // this is for the dummy car image color
-   @Column(nullable = false)
-   public String rgbColor;
+    @Column(nullable = false)
+    public int year;
 
-   @Column
-   public int prevOwners;
+    @Column(nullable = false)
+    public String colorDescription;
 
-   @Column
-   public Date inspectionValidUntil;
+    // this is for the dummy car image color
+    @Column(nullable = false)
+    public String rgbColor;
 
-   // bought in country, service book...
-   @Column
-   public String history;
+    @Column
+    public int prevOwners;
 
-   // those from VehicleFeatures class
-   @ElementCollection
-   public Collection<String> features;
+    @Column
+    public Date inspectionValidUntil;
 
-   // identifiers for image paths
-   @ElementCollection
-   public Collection<String> gallery;
+    // bought in country, service book...
+    @Column
+    public String history;
+
+    // those from VehicleFeatures class
+    @ManyToMany
+    @Fetch(FetchMode.SUBSELECT)
+    public Collection<VehicleFeature> features;
+
+    // identifiers for image paths
+    @OneToMany
+    @JoinColumn(name = "V_OFFER")
+    @Fetch(FetchMode.SUBSELECT)
+    public Collection<VehicleGalleryItem> gallery;
 }

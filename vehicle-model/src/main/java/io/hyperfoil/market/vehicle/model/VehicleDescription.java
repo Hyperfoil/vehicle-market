@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
 import javax.persistence.Table;
@@ -22,40 +21,22 @@ import javax.persistence.Table;
         @Index(columnList = "VCLASS", name = "V_DESCRIPTION_VCLASS"),
         @Index(columnList = "FUEL", name = "V_DESCRIPTION_FUEL"),
 })
-@NamedQueries({
-        @NamedQuery(name=VehicleDescription.QUERY_COUNT,
-                query="SELECT COUNT(vd.id) FROM VehicleDescription vd"),
-        @NamedQuery(name=VehicleDescription.QUERY_GET_VD_BY_IDS,
-                query="SELECT vd FROM VehicleDescription vd where vd.id in :ids"),
-//        @NamedQuery(name=VehicleDescription.QUERY_BY_CATEGORY,
-//                query="SELECT vd FROM VehicleDescription vd where vd.category = :category",
-//                hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"),
-//                        @QueryHint(name="javax.persistence.cache.storeMode", value="USE")}),
-        @NamedQuery(name=VehicleDescription.DISTINCT_YEARS,
-                query="SELECT DISTINCT (vd.year) FROM VehicleDescription vd",
-                hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"),
-                        @QueryHint(name="javax.persistence.cache.storeMode", value="USE")}),
-        @NamedQuery(name=VehicleDescription.DISTINCT_TRANSMISSIONS,
-                query="SELECT DISTINCT (vd.trany) FROM VehicleDescription vd",
-                hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"),
-                        @QueryHint(name="javax.persistence.cache.storeMode", value="USE")}),
-        @NamedQuery(name=VehicleDescription.DISTINCT_DRIVERTRAIN,
-                query="SELECT DISTINCT (vd.drive) FROM VehicleDescription vd",
-                hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"),
-                        @QueryHint(name="javax.persistence.cache.storeMode", value="USE")}),
-        @NamedQuery(name=VehicleDescription.DISTINCT_VCLASS,
-                query="SELECT DISTINCT (vd.vClass) FROM VehicleDescription vd",
-                hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"),
-                        @QueryHint(name="javax.persistence.cache.storeMode", value="USE")}),
-        @NamedQuery(name=VehicleDescription.DISTINCT_MAKES,
-                query="SELECT DISTINCT (vd.make) FROM VehicleDescription vd",
-                hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"),
-                        @QueryHint(name="javax.persistence.cache.storeMode", value="USE")}),
-        @NamedQuery(name=VehicleDescription.DISTINCT_MODELS,
-                query="SELECT DISTINCT (vd.model) FROM VehicleDescription vd WHERE vd.make=:m",
-                hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"),
-                        @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
-})
+@NamedQuery(name=VehicleDescription.QUERY_COUNT, query="SELECT COUNT(vd.id) FROM VehicleDescription vd")
+@NamedQuery(name=VehicleDescription.QUERY_GET_VD_BY_IDS, query="SELECT vd FROM VehicleDescription vd where vd.id in :ids")
+//@NamedQuery(name=VehicleDescription.QUERY_BY_CATEGORY, query="SELECT vd FROM VehicleDescription vd where vd.category = :category",
+//        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+@NamedQuery(name=VehicleDescription.DISTINCT_YEARS, query="SELECT DISTINCT (vd.year) FROM VehicleDescription vd",
+        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+@NamedQuery(name=VehicleDescription.DISTINCT_TRANSMISSIONS, query="SELECT DISTINCT (vd.trany) FROM VehicleDescription vd",
+        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+@NamedQuery(name=VehicleDescription.DISTINCT_DRIVERTRAIN, query="SELECT DISTINCT (vd.drive) FROM VehicleDescription vd",
+        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+@NamedQuery(name=VehicleDescription.DISTINCT_VCLASS, query="SELECT DISTINCT (vd.vClass) FROM VehicleDescription vd",
+        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+@NamedQuery(name=VehicleDescription.DISTINCT_MAKES,  query="SELECT DISTINCT (vd.make) FROM VehicleDescription vd",
+        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+@NamedQuery(name=VehicleDescription.DISTINCT_MODELS, query="SELECT DISTINCT (vd.model) FROM VehicleDescription vd WHERE vd.make=:m",
+        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
 public class VehicleDescription {
 
     public static final String QUERY_COUNT = "VehicleDescription.getCount";

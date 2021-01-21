@@ -28,6 +28,7 @@
     <surefire-plugin.version>2.22.2</surefire-plugin.version>
     <!-- -->
     <org.apache.commons-csv.version>1.7</org.apache.commons-csv.version>
+    <hibernate-orm.version>5.4.26.Final</hibernate-orm.version>
   </properties>
   <dependencyManagement>
     <dependencies>

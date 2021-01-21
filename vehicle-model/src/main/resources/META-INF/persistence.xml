@@ -3,9 +3,12 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
     <persistence-unit name="vehicle" transaction-type="JTA">
         <class>io.hyperfoil.market.vehicle.model.VehicleDescription</class>
+        <class>io.hyperfoil.market.vehicle.model.VehicleFeature</class>
+        <class>io.hyperfoil.market.vehicle.model.VehicleGalleryItem</class>
         <class>io.hyperfoil.market.vehicle.model.VehicleOffer</class>
         <properties>
             <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
         </properties>

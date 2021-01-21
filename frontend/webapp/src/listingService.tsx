@@ -4,7 +4,7 @@ import { ContactInfo, appendToken } from './userService';
 
 const BASE_URL = CONFIG ? CONFIG.listingUrl : "";
 
-// Maps to io.hyperfoil.market.listing.client.Offering
+// Maps to io.hyperfoil.market.vehicle.dto.Offering
 export type Offering = {
     id: number,
     model: VehicleDescription,
@@ -35,6 +35,7 @@ export type GalleryItem = {
     title: string,
 }
 
+// Maps to io.hyperfoil.market.vehicle.dto.OfferingList
 export type OfferingList = {
     page: number,
     perPage: number,
