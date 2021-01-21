@@ -72,3 +72,17 @@ A random address generator can be created using a dataset released by Intel unde
 
 ### Name database :red_circle:
 A random name generator can be created using a dataset released by Intel under a XXX licensing agreement
+
+## Building the project
+
+```bash
+mvn package -Dquarkus.container-image.build=true
+```
+
+## Running the project
+
+```bash
+podman-compose -f scripts/docker-compose.yaml -p vehicle-market up
+# To stop it:
+podman-compose -f scripts/docker-compose.yaml -p vehicle-market down && podman volume rm vehicle-market_pgdata
+```

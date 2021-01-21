@@ -23,7 +23,7 @@ import java.util.Date;
 @Cacheable
 @Table(name = "V_OFFER")
 @NamedQuery(name = VehicleOffer.QUERY_ALL, query = "SELECT vo FROM VehicleOffer vo")
-@NamedQuery(name = VehicleOffer.QUERY_COUNT, query = "SELECT COUNT(vd.id) FROM VehicleDescription vd")
+@NamedQuery(name = VehicleOffer.QUERY_COUNT, query = "SELECT COUNT(vo.id) FROM VehicleOffer vo")
 @NamedQuery(name = VehicleOffer.QUERY_FOR_DTO, query = "SELECT vo FROM VehicleOffer vo JOIN FETCH vo.model")
 @NamedEntityGraph(name = VehicleOffer.WITH_GALLERY, attributeNodes = @NamedAttributeNode("gallery"))
 public class VehicleOffer {

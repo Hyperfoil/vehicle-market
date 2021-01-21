@@ -34,9 +34,15 @@ import io.hyperfoil.market.user.entity.User;
 @Path("/")
 @RequestScoped
 public class UserService {
+   static final int SALT_BYTES = 16;
+   static final int TOKEN_BYTES = 24;
+
    @Inject
    @PersistenceContext(unitName = "user")
    EntityManager entityManager;
+
+   @Inject
+   Config config;
 
    @POST
    @Path("login")
@@ -49,12 +55,10 @@ public class UserService {
       }
       try {
          User user = entityManager.createNamedQuery(User.FIND_BY_USERNAME, User.class).getSingleResult();
-         PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), user.salt, 65536, 128);
-         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-         byte[] passhash = factory.generateSecret(spec).getEncoded();
+         byte[] passhash = computeHash(password, user.salt, config.hashIterations);
          if (Arrays.equals(passhash, user.passhash)) {
             Token token = new Token();
-            byte[] tokenBytes = new byte[24];
+            byte[] tokenBytes = new byte[TOKEN_BYTES];
             new SecureRandom().nextBytes(tokenBytes);
             token.token = Base64.getEncoder().encodeToString(tokenBytes);
             token.user = user;
@@ -103,13 +107,16 @@ public class UserService {
       user.lastName = registration.user.lastName;
       user.email = registration.user.email;
       user.phone = registration.user.phone;
-      user.salt = new byte[16];
-
+      user.salt = new byte[SALT_BYTES];
       new SecureRandom().nextBytes(user.salt);
-      PBEKeySpec spec = new PBEKeySpec(registration.password.toCharArray(), user.salt, 65536, 128);
-      SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-      user.passhash = factory.generateSecret(spec).getEncoded();
+      user.passhash = computeHash(registration.password, user.salt, config.hashIterations);
 
       entityManager.persist(user);
+   }
+
+   static byte[] computeHash(String password, byte[] salt, int iterationCount) throws NoSuchAlgorithmException, InvalidKeySpecException {
+      PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iterationCount, 128);
+      SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+      return factory.generateSecret(spec).getEncoded();
    }
 }
