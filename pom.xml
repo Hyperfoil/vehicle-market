@@ -7,11 +7,11 @@
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-    <module>frontend</module>
+    <module>vehicle-model</module>
+    <module>vehicle-discovery</module>
     <module>listing</module>
     <module>user</module>
-    <module>vehicle-discovery</module>
-    <module>vehicle-model</module>
+    <module>frontend</module>
   </modules>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -41,6 +41,17 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
   <profiles>
     <profile>
       <id>quarkus</id>

@@ -9,7 +9,7 @@ import org.apache.commons.csv.CSVRecord;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class FuelEconomyLoader {
     /**
      * Loads vehicle descriptions from local CSV file
      */
-    @GET
+    @POST
     @Transactional
     @Path("/local")
     public Response loadLocal() throws IOException {
@@ -42,7 +42,7 @@ public class FuelEconomyLoader {
     /**
      * Loads vehicle descriptions from remote CSV file (fetched from the US department of energy)
      */
-    @GET
+    @POST
     @Transactional
     @TransactionConfiguration(timeout = 600) // TODO: quarkus specific
     @Path("/remote")

@@ -3,6 +3,8 @@ INSERT INTO v_feature (id, category, description, name) VALUES (2, 4, 'Turns win
 INSERT INTO v_feature (id, category, description, name) VALUES (3, 0, null, 'Sport Seats');
 INSERT INTO v_feature (id, category, description, name) VALUES (4, 0, 'Destroys your battery 2x faster', 'Start-Stop');
 
+-- TODO: Move descriptions and features to vehicle-discovery
+
 --
 
 INSERT INTO v_description (id, drive, emissions, engine, fuel, make, model, seats, trany, vclass, year) VALUES (1, 'Front-Wheel Drive', 'EURO6a', '2.0 CDTi, 123kW', 'Diesel', 'ACME Cars', 'Fooryon', 5, 'Manual 6-speed', 'hatchback', 2018);
@@ -22,6 +24,8 @@ INSERT INTO v_offer (id, model_id, colordescription, history, inspectionvalidunt
 
 INSERT INTO v_gallery (id, V_OFFER, title, url) VALUES (3, 2, 'See this beast!', '/images/car?type=supercar&color=%23ff9cfa');
 
+--
+ALTER SEQUENCE hibernate_sequence RESTART WITH 100;
 
 
 
