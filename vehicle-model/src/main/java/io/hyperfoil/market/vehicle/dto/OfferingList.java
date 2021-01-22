@@ -13,12 +13,12 @@ public class OfferingList {
 
     public int total;
 
-    public List<Offering> items;
+    public List<OfferingOverview> items;
 
-    public OfferingList(int page, int perPage, int total, List<? extends VehicleOffer> items) {
+    public OfferingList(int page, int perPage, int total, List<OfferingOverview> items) {
         this.page = page;
         this.perPage = perPage;
         this.total = total;
-        this.items = items.stream().map(Offering::new).collect(Collectors.toList());
+        this.items = items;
     }
 }

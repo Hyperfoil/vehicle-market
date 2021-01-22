@@ -1,7 +1,8 @@
 package io.hyperfoil.market.vehicle.repository;
 
-import io.hyperfoil.market.vehicle.dto.Offering;
+import io.hyperfoil.market.vehicle.dto.OfferingDetails;
 import io.hyperfoil.market.vehicle.dto.OfferingList;
+import io.hyperfoil.market.vehicle.dto.OfferingOverview;
 import io.hyperfoil.market.vehicle.model.VehicleFeature;
 import io.hyperfoil.market.vehicle.model.VehicleOffer;
 
@@ -24,12 +25,12 @@ public class VehicleListingRepository {
     /**
      * Gets a vehicle offering with the given id.
      */
-    public Offering findById(Long id) {
+    public OfferingDetails findById(Long id) {
         VehicleOffer vehicleOffer = entityManager.find(VehicleOffer.class, id, Collections.singletonMap("javax.persistence.fetchgraph", entityManager.getEntityGraph(VehicleOffer.WITH_GALLERY)));
         if (vehicleOffer == null) {
             throw new EntityNotFoundException();
         } else {
-            return new Offering(vehicleOffer);
+            return new OfferingDetails(vehicleOffer);
         }
     }
 
@@ -41,7 +42,7 @@ public class VehicleListingRepository {
                 page,
                 pageSize,
                 entityManager.createNamedQuery(VehicleOffer.QUERY_COUNT, Number.class).getSingleResult().intValue(),
-                entityManager.createNamedQuery(VehicleOffer.QUERY_FOR_DTO, VehicleOffer.class).setFirstResult(page * pageSize).setMaxResults(pageSize).getResultList()
+                entityManager.createNamedQuery(VehicleOffer.QUERY_OVERVIEW, OfferingOverview.class).setFirstResult(page * pageSize).setMaxResults(pageSize).getResultList()
         );
     }
 

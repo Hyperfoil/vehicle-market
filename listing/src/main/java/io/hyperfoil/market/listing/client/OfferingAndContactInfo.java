@@ -1,8 +1,8 @@
 package io.hyperfoil.market.listing.client;
 
-import io.hyperfoil.market.vehicle.dto.Offering;
+import io.hyperfoil.market.vehicle.dto.OfferingDetails;
 
 public class OfferingAndContactInfo {
-   public Offering offering;
+   public OfferingDetails offering;
    public ContactInfo contactInfo;
 }

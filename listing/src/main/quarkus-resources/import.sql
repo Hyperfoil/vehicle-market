@@ -9,22 +9,23 @@ INSERT INTO v_feature (id, category, description, name) VALUES (4, 0, 'Destroys 
 
 INSERT INTO v_description (id, drive, emissions, engine, fuel, make, model, seats, trany, vclass, year) VALUES (1, 'Front-Wheel Drive', 'EURO6a', '2.0 CDTi, 123kW', 'Diesel', 'ACME Cars', 'Fooryon', 5, 'Manual 6-speed', 'hatchback', 2018);
 
-INSERT INTO v_offer (id, model_id, colordescription, history, inspectionvaliduntil, mileage, prevowners, rgbcolor, trimlevel, year) VALUES (1, 1, 'Dark Red', 'Well clean is as good as new', '2021-06-27 00:00:00', 12345, 1, '0099FF', 'Barneo', 2019);
-
-INSERT INTO v_offer_v_feature (features_id, vehicleoffer_id) VALUES (1, 1), (2, 1), (3, 1), (4, 1);
-
 INSERT INTO v_gallery (id, V_OFFER, title, url) VALUES (1, 1, 'Front image', '/images/car?type=hatchback&color=%23b52828');
 INSERT INTO v_gallery (id, V_OFFER, title, url) VALUES (2, 1, 'Rear image', '/images/car?type=sedan&color=%23b52828');
+
+INSERT INTO v_offer (id, price, model_id, colordescription, history, inspectionvaliduntil, mileage, prevowners, rgbcolor, trimlevel, year, mainimage_id) VALUES (1, 11111, 1, 'Dark Red', 'Well clean is as good as new', '2021-06-27 00:00:00', 12345, 1, '0099FF', 'Barneo', 2019, 1);
+
+INSERT INTO v_offer_v_feature (features_id, vehicleoffer_id) VALUES (1, 1), (2, 1), (3, 1), (4, 1);
 
 --
 
 INSERT INTO v_description (id, drive, emissions, engine, fuel, make, model, seats, trany, vclass, year) VALUES (2, 'Rear-Wheel Drive', 'EURO1a', '4.0, 666kW', 'Gasoline', 'Diabolico', 'Daredevil', 1, 'Automatic 666-speed', 'supercar', 2012);
 
-INSERT INTO v_offer (id, model_id, colordescription, history, inspectionvaliduntil, mileage, prevowners, rgbcolor, trimlevel, year) VALUES (2, 2, 'Evil Pink', 'Blablabla...', '2021-09-27 00:00:00', 666666, 1, '0099FF', 'Barneo', 2012);
-
 INSERT INTO v_gallery (id, V_OFFER, title, url) VALUES (3, 2, 'See this beast!', '/images/car?type=supercar&color=%23ff9cfa');
 
+INSERT INTO v_offer (id, price, model_id, colordescription, history, inspectionvaliduntil, mileage, prevowners, rgbcolor, trimlevel, year, mainimage_id) VALUES (2, 123456, 2, 'Evil Pink', 'Blablabla...', '2021-09-27 00:00:00', 666666, 1, '0099FF', 'Barneo', 2012, 3);
+
 --
+
 ALTER SEQUENCE hibernate_sequence RESTART WITH 100;
 
 

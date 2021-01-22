@@ -35,10 +35,10 @@ function BrowsePage() {
                 style={{ gridRow: i + 1}}
             />
             <img
-                alt={ o.model.make + " " + o.model.model }
+                alt={ o.make + " " + o.modelName }
                 className="offeringimage"
                 style={{ gridRow: i + 1}}
-                src={ o.gallery.length > 0 ? o.gallery[0].url : "/nocar.svg" }
+                src={ !o.imageURL ? "/nocar.svg" : o.imageURL }
                 onClick={() => history.push("/offering/" + o.id)}
             />
             <div
@@ -46,16 +46,16 @@ function BrowsePage() {
                 style={{ gridRow: i + 1}}
                 onClick={() => history.push("/offering/" + o.id)}
             >
-                <h3>{ o.model.make } { o.model.model }, { o.year }</h3>
+                <h3>{ o.make } { o.modelName }, { o.year }</h3>
                 { o.history && <>{ o.history }<br /></> }
-                { o.features.slice(0, 8).map((f, j) => addComma(j, f.description ?
+                {/* { o.features.slice(0, 8).map((f, j) => addComma(j, f.description ?
                     <Tooltip key={j} content={ f.description }><span style={{ textDecoration: "underline "}}>{ f.name }</span></Tooltip>
-                : f.name, j < Math.min(o.features.length, 8))) }
+                : f.name, j < Math.min(o.features.length, 8))) } */}
                 <div className="offeringdetails">
                     <div><FontAwesomeIcon icon={ faTachometerAlt } />{o.mileage}</div>
-                    <div><FontAwesomeIcon icon={ faCogs } />{o.model.trany}</div>
-                    <div><FontAwesomeIcon icon={ faGasPump } />{o.model.fuel} { o.model.emissions }</div>
-                    <div><FontAwesomeIcon icon={ faCar } />{ o.model.engine }</div>
+                    <div><FontAwesomeIcon icon={ faCogs } />{o.trany}</div>
+                    <div><FontAwesomeIcon icon={ faGasPump } />{o.fuel} { o.emissions }</div>
+                    <div><FontAwesomeIcon icon={ faCar } />{ o.engine }</div>
                 </div>
             </div>
             <div
@@ -64,7 +64,7 @@ function BrowsePage() {
                 onClick={() => history.push("/offering/" + o.id)}
             >
                 Price:<br />
-                <span className="price total">$123,456</span><br />
+                <span className="price total">${ o.price }</span><br />
                 Monthly installment:<br />
                 <span className="price installment">from $123</span>
             </div>

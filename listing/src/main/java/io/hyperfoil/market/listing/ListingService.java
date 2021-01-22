@@ -1,7 +1,7 @@
 package io.hyperfoil.market.listing;
 
 import io.hyperfoil.market.listing.client.OfferingAndContactInfo;
-import io.hyperfoil.market.vehicle.dto.Offering;
+import io.hyperfoil.market.vehicle.dto.OfferingDetails;
 import io.hyperfoil.market.vehicle.dto.OfferingList;
 import io.hyperfoil.market.vehicle.model.VehicleFeature;
 import io.hyperfoil.market.vehicle.repository.VehicleListingRepository;
@@ -39,7 +39,7 @@ public class ListingService {
 
     @GET
     @Path("/offering/{id}")
-    public Offering get(@PathParam("id") long id) {
+    public OfferingDetails get(@PathParam("id") long id) {
         return repository.findById(id);
     }
 

@@ -36,6 +36,7 @@ function OfferingPage() {
         </div>
         <div>
             <h1>{ offering.model.make } { offering.model.model }, { offering.year }</h1>
+            <span>Buy now for just <span className="price total">${ offering.price }</span></span>
             <h3>Technical parameters</h3>
             <div className="techparams">
                 <span className="label">Operating since</span>

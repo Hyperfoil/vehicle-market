@@ -11,8 +11,9 @@ import java.util.Date;
 /**
  * Client representation of {@link io.hyperfoil.market.vehicle.model.VehicleOffer}
  */
-public class Offering {
+public class OfferingDetails {
     public long id;
+    public long price;
     public VehicleDescription model;
     public String trimLevel;
     public long mileage;
@@ -24,8 +25,9 @@ public class Offering {
     public Collection<VehicleFeature> features;
     public Collection<VehicleGalleryItem> gallery;
 
-    public Offering(VehicleOffer offer) {
+    public OfferingDetails(VehicleOffer offer) {
         this.id = offer.id;
+        this.price = offer.price;
         this.model = offer.model;
         this.trimLevel = offer.trimLevel;
         this.mileage = offer.mileage;

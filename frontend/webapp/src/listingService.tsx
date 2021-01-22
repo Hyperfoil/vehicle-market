@@ -4,9 +4,28 @@ import { ContactInfo, appendToken } from './userService';
 
 const BASE_URL = CONFIG ? CONFIG.listingUrl : "";
 
-// Maps to io.hyperfoil.market.vehicle.dto.Offering
+// Maps to io.hyperfoil.market.vehicle.dto.OfferingOverview
+export type OfferingOverview = {
+    id: number,
+    price: number,
+    make: string,
+    modelName: string, 
+    trimLevel: string,
+    trany: string,
+    fuel: string,
+    emissions: string,
+    engine: string,
+    mileage: number,
+    year: number,
+    color: string,
+    history: string,
+    imageURL: string,
+}
+
+// Maps to io.hyperfoil.market.vehicle.dto.OfferingDetails
 export type Offering = {
     id: number,
+    price: number,
     model: VehicleDescription,
     trimLevel: string,
     mileage: number,
@@ -40,7 +59,7 @@ export type OfferingList = {
     page: number,
     perPage: number,
     total: number,
-    items: Offering[],
+    items: OfferingOverview[],
 }
 
 export const NO_OFFERINGS: OfferingList = { page: 1, perPage: 0, total: 0, items: []};

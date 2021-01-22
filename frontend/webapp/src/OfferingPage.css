@@ -33,6 +33,15 @@ h3 {
     margin-top: 20px;
 }
 
+.price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.price.total {
+    color: red;
+}
+
 .techparams {
     display: grid;
     grid-template-columns: auto auto auto auto;
