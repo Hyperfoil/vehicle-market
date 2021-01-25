@@ -29,6 +29,7 @@
     <!-- -->
     <org.apache.commons-csv.version>1.7</org.apache.commons-csv.version>
     <hibernate-orm.version>5.4.26.Final</hibernate-orm.version>
+    <jkube-kubernetes-maven-plugin.version>1.0.2</jkube-kubernetes-maven-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -94,6 +95,93 @@
           </dependency>
         </dependencies>
       </dependencyManagement>
+    </profile>
+    <profile>
+      <id>build-database</id>
+      <activation>
+        <!-- This is a hacky way to not inherit the profile in submodules -->
+        <file>
+          <exists>scripts/initdb.sh</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>podman-system-service</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <skip>false</skip>
+                  <async>true</async>
+                  <!-- We're not terminating this forcefully as podman 2.0.6 seems to hang
+                       in shutdown when SIGTERM is received. Without killing it it correctly
+                       stops after 1 minute of inactivity -->
+                  <!-- <asyncDestroyOnShutdown>true</asyncDestroyOnShutdown> -->
+                  <executable>podman</executable>
+                  <arguments>
+                    <argument>system</argument>
+                    <argument>service</argument>
+                    <argument>-t</argument>
+                    <argument>60</argument>
+                    <argument>tcp:localhost:2375</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.eclipse.jkube</groupId>
+            <artifactId>kubernetes-maven-plugin</artifactId>
+            <version>${jkube-kubernetes-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>build-image</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <access>
+                <!-- We shouldn't connect anywhere, this is here to fail faster -->
+                <masterUrl>http://127.0.0.1:12345</masterUrl>
+              </access>
+              <dockerHost>tcp://127.0.0.1:2375</dockerHost>
+              <images>
+                <image>
+                  <name>quay.io/hyperfoil/vehicle-market-postgres</name>
+                  <build>
+                    <contextDir>${project.basedir}/scripts</contextDir>
+                    <dockerFile>Dockerfile.database</dockerFile>
+                    <tags>
+                      <tag>latest</tag>
+                      <tag>${project.version}</tag>
+                    </tags>
+                    <assembly>
+                      <name>maven</name>
+                      <inline>
+                        <fileSets>
+                          <fileSet>
+                            <directory>scripts</directory>
+                            <outputDirectory>.</outputDirectory>
+                          </fileSet>
+                        </fileSets>
+                      </inline>
+                    </assembly>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 </project>

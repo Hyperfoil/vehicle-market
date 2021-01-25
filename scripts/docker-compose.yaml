@@ -3,16 +3,11 @@ volumes:
   pgdata:
 services:
   postgres:
-    image: postgres:12
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: pgpass
-      POSTGRES_DB: vehicle
+    image: quay.io/hyperfoil/vehicle-market-postgres
     ports:
     - 5432:5432
     volumes:
     - pgdata:/var/lib/postgresql/data
-    - ./initdb.sh:/docker-entrypoint-initdb.d/initdb.sh:Z
   discovery:
     image: quay.io/hyperfoil/vehicle-market-vehicle-discovery
     deploy:
