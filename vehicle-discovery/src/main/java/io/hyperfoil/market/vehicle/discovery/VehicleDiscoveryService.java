@@ -1,9 +1,12 @@
 package io.hyperfoil.market.vehicle.discovery;
 
-import io.hyperfoil.market.vehicle.repository.VehicleDescriptionRepository;
-
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,8 +16,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static io.hyperfoil.market.vehicle.discovery.VehicleDescription.*;
+import static javax.ws.rs.core.Response.ok;
 
 @Path("/vehicle")
 @RequestScoped
@@ -24,139 +34,98 @@ public class VehicleDiscoveryService {
 
     private static final Logger logger = Logger.getLogger(VehicleDiscoveryService.class.getName());
 
-    @Inject
-    VehicleDescriptionRepository repository;
+    @PersistenceContext(unitName = "discovery")
+    EntityManager em;
 
     /**
      * Gets a vehicle with the given id.
      *
      * @param id the id to search
-     * @return A response object containing the vehicle.
+     * @return A vehicle description.
      */
     @GET
     @Path("/id/{id}")
-    public Response byId(@PathParam("id") Long id) {
-        try {
-            return Response.ok(repository.findById(id)).build();
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error retrieving vehicle ", e);
-            return Response.serverError().build();
-        }
+    public VehicleDescription byId(@PathParam("id") Long id) {
+        return em.find(VehicleDescription.class, id);
     }
 
     /**
      * Gets a list of all of the vehicle models for a given make.
      *
      * @param  make  the make to search
-     * @return A response object containing a list of models.
+     * @return A list of models.
      */
     @GET
     @Path("/models/{make}")
-    public Response getModels(@PathParam("make") String make) {
-        try {
-            return Response.ok(repository.getModels(make)).build();
-        }
-        catch (Exception e) {
-            logger.log(Level.SEVERE,"Error retrieving the list of models ", e);
-            return Response.serverError().build();
-        }
+    public Collection<String> getModels(@PathParam("make") String make) {
+        return em.createNamedQuery(DISTINCT_MODELS, String.class).setParameter("m", make).getResultList();
     }
 
     /**
      * Gets a list of all of the vehicle makes (manufactures).
      *
-     * @return A response object containing a list of makes.
+     * @return A list of makes.
      */
     @GET
     @Path("/makes")
-    public Response makes() {
-        try {
-            return Response.ok(repository.getMakes()).build();
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error retrieving makes ", e);
-            return Response.serverError().build();
-        }
+    public Collection<String> makes() {
+        return em.createNamedQuery(DISTINCT_MAKES, String.class).getResultList();
     }
 
     /**
      * Gets a list of all of the vehicle years.
      *
-     * @return A response object containing a list of years.
+     * @return A list of years.
      */
     @GET
     @Path("/years")
-    public Response getYears() {
-        try {
-            return Response.ok(repository.getYears()).build();
-        }
-        catch (Exception e) {
-            logger.log(Level.SEVERE, "Error retrieving the list of years ", e);
-            return Response.serverError().build();
-        }
+    public Collection<Integer> getYears() {
+        return em.createNamedQuery(DISTINCT_YEARS, Integer.class).getResultList();
     }
+
     /**
      * Gets a list of all of the vehicle transmissions.
      *
-     * @return A response object containing a list of transmissions.
+     * @return A list of transmissions.
      */
     @GET
     @Path("/transmissions")
-    public Response getTransmissions() {
-        try {
-            return Response.ok(repository.getTransmissions()).build();
-        } catch (Exception e) {
-            logger.info("Error retrieving the list of transmissions " + e.getMessage());
-            return Response.serverError().build();
-        }
+    public Collection<String> getTransmissions() {
+        return em.createNamedQuery(DISTINCT_TRANSMISSIONS, String.class).getResultList();
     }
 
     /**
      * Gets a list of all of the vehicle drivetrains.
      *
-     * @return A response object containing a list of drivetrains.
+     * @return A list of drivetrains.
      */
     @GET
     @Path("/drivetrains")
-    public Response getDrivetrains() {
-        try {
-            return Response.ok(repository.getDrivetrains()).build();
-        } catch (Exception e) {
-            logger.info("Error retrieving the list of drivetrains " + e.getMessage());
-            return Response.serverError().build();
-        }
+    public Collection<String> getDrivetrains() {
+        return em.createNamedQuery(DISTINCT_DRIVERTRAIN, String.class).getResultList();
     }
 
 
     /**
      * Gets a list of all of the vehicle classes.
      *
-     * @return A response object containing a list of vehicle classes.
+     * @return A list of vehicle classes.
      */
     @GET
     @Path("/classes")
-    public Response getClasses() {
-        try {
-            return Response.ok(repository.getClasses()).build();
-        } catch (Exception e) {
-            logger.info("Error retrieving the list of classes " + e.getMessage());
-            return Response.serverError().build();
-        }
+    public Collection<String> getClasses() {
+        return em.createNamedQuery(DISTINCT_VCLASS, String.class).getResultList();
     }
 
     /**
      * Gets a count of vehicle descriptions.
      *
-     * @return A response object containing a list of years as integer objects.
+     * @return The number of total vehicle descriptions.
      */
     @GET
     @Path("/count")
-    public Response getCount() {
-        try {
-            return Response.ok(repository.count()).build();
-        } catch (Exception e) {
-            logger.info("Error retrieving the count of vehicle descriptions" + e.getMessage());
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+    public Long getCount() {
+        return em.createNamedQuery(QUERY_COUNT, Number.class).getSingleResult().longValue();
     }
 
     /**
@@ -170,7 +139,43 @@ public class VehicleDiscoveryService {
     @Path("search")
     public Response search(@Context UriInfo info) {
         try {
-            return Response.ok(repository.search(info.getQueryParameters())).build();
+            CriteriaBuilder builder = em.getCriteriaBuilder();
+            CriteriaQuery<VehicleDescription> query = builder.createQuery(VehicleDescription.class);
+            Root<VehicleDescription> vehicle = query.from(VehicleDescription.class);
+
+            List<Predicate> restrictions = new ArrayList<>();
+            for (Map.Entry<String, List<String>> entry : info.getQueryParameters().entrySet()) {
+                switch (entry.getKey()) {
+                    case "make":
+                        restrictions.add(builder.equal(vehicle.<String>get("make"), entry.getValue().stream().findFirst().orElse("") ));
+                        break;
+                    case "model":
+                        restrictions.add(builder.equal(vehicle.<String>get("model"), entry.getValue().stream().findFirst().orElse("") ));
+                        break;
+                    case "fuel":
+                        restrictions.add(builder.equal(vehicle.<String>get("fuel"), entry.getValue().stream().findFirst().orElse("") ));
+                        break;
+                    case "year":
+                        restrictions.add(builder.equal(vehicle.<Integer>get("year"), entry.getValue().stream().findFirst().stream().findFirst().map(Integer::parseInt).orElse(0) ));
+                        break;
+                    case "drivetrain":
+                        restrictions.add(builder.equal(vehicle.<String>get("drive"), entry.getValue().stream().findFirst().stream().findFirst().orElse("") ));
+                        break;
+                    case "transmission":
+                        restrictions.add(builder.equal(vehicle.<String>get("trany"), entry.getValue().stream().findFirst().stream().findFirst().orElse("") ));
+                        break;
+                    case "vclass":
+                        restrictions.add(builder.equal(vehicle.<String>get("vClass"), entry.getValue().stream().findFirst().stream().findFirst().orElse("") ));
+                        break;
+                    case "version":
+                        // ignore the version field for searching.
+                        break;
+                    default:
+                        logger.warning("Unknown Query Parameter encountered! key=" + entry.getKey() + " value=" + entry.getValue().get(0));
+                        break;
+                }
+            }
+            return ok(em.createQuery(query.where(restrictions.toArray(new Predicate[] {}))).getResultList()).build();
         }
         catch (Exception e) {
             logger.log(Level.SEVERE,"Error retrieving the list of vehicles ", e);

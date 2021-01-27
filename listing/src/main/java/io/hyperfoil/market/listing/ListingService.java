@@ -1,15 +1,18 @@
 package io.hyperfoil.market.listing;
 
 import io.hyperfoil.market.listing.client.OfferingAndContactInfo;
-import io.hyperfoil.market.vehicle.dto.OfferingDetails;
-import io.hyperfoil.market.vehicle.dto.OfferingList;
-import io.hyperfoil.market.vehicle.model.VehicleFeature;
-import io.hyperfoil.market.vehicle.repository.VehicleListingRepository;
+import io.hyperfoil.market.listing.client.OfferingDetails;
+import io.hyperfoil.market.listing.client.OfferingList;
+import io.hyperfoil.market.listing.client.OfferingOverview;
+import io.hyperfoil.market.listing.model.VehicleFeature;
+import io.hyperfoil.market.listing.model.VehicleOffer;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.Cache;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -20,6 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
+import java.util.Collections;
 
 @Path("/")
 @RequestScoped
@@ -28,19 +32,29 @@ import java.util.Collection;
 public class ListingService {
     private static final Logger log = Logger.getLogger(ListingService.class);
 
-    @Inject
-    VehicleListingRepository repository;
+    @PersistenceContext(unitName = "listing")
+    EntityManager em;
 
     @GET
     @Path("/list")
     public OfferingList list(@QueryParam("page") int page, @QueryParam("perPage") int perPage) {
-        return repository.allOfferings(page, perPage);
+        return new OfferingList(
+                page,
+                perPage,
+                em.createNamedQuery(VehicleOffer.QUERY_COUNT, Number.class).getSingleResult().intValue(),
+                em.createNamedQuery(VehicleOffer.QUERY_OVERVIEW, OfferingOverview.class).setFirstResult(page * perPage).setMaxResults(perPage).getResultList()
+        );
     }
 
     @GET
     @Path("/offering/{id}")
     public OfferingDetails get(@PathParam("id") long id) {
-        return repository.findById(id);
+        VehicleOffer vehicleOffer = em.find(VehicleOffer.class, id, Collections.singletonMap("javax.persistence.fetchgraph", em.getEntityGraph(VehicleOffer.WITH_GALLERY)));
+        if (vehicleOffer == null) {
+            throw new EntityNotFoundException();
+        } else {
+            return new OfferingDetails(vehicleOffer);
+        }
     }
 
     @POST
@@ -58,6 +72,6 @@ public class ListingService {
     @Path("/allfeatures")
     @Cache
     public Collection<VehicleFeature> allFeatures() {
-        return repository.allFeatures();
+        return em.createNamedQuery(VehicleFeature.QUERY_ALL, VehicleFeature.class).getResultList();
     }
 }

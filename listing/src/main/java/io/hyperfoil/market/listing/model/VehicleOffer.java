@@ -1,4 +1,4 @@
-package io.hyperfoil.market.vehicle.model;
+package io.hyperfoil.market.listing.model;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedQuery;
@@ -27,7 +26,7 @@ import java.util.Date;
 @Table(name = "V_OFFER")
 @NamedQuery(name = VehicleOffer.QUERY_ALL, query = "SELECT vo FROM VehicleOffer vo")
 @NamedQuery(name = VehicleOffer.QUERY_COUNT, query = "SELECT COUNT(vo.id) FROM VehicleOffer vo")
-@NamedQuery(name = VehicleOffer.QUERY_OVERVIEW, query = "SELECT new io.hyperfoil.market.vehicle.dto.OfferingOverview(vo.id, vo.price, model.make, model.model, model.trany, model.fuel, model.emissions, model.engine, image.url, vo.trimLevel, vo.history, vo.mileage, vo.year, vo.colorDescription) FROM VehicleOffer vo JOIN vo.model model LEFT JOIN vo.mainImage image")
+@NamedQuery(name = VehicleOffer.QUERY_OVERVIEW, query = "SELECT new io.hyperfoil.market.listing.client.OfferingOverview(vo.id, vo.make, vo.model, vo.trany, vo.vClass, vo.fuel, vo.seats, vo.emissions, vo.engine, image.url, vo.trimLevel, vo.history, vo.mileage, vo.year, vo.colorDescription) FROM VehicleOffer vo LEFT JOIN vo.mainImage image")
 @NamedEntityGraph(name = VehicleOffer.WITH_GALLERY, attributeNodes = {@NamedAttributeNode("model"), @NamedAttributeNode("gallery") })
 public class VehicleOffer {
 
@@ -42,10 +41,35 @@ public class VehicleOffer {
     public Long id;
 
     @Column(nullable = false)
-    public long price;
-    
-    @ManyToOne(optional = false)
-    public VehicleDescription model;
+    public String make;
+
+    @Column(nullable = false)
+    public String model;
+
+    @Column(nullable = false)
+    public String trany;
+
+    @Column(nullable = false)
+    public String drive;
+
+    // displacement, type, power: 1.2 TCe, 92kW
+    @Column(nullable = false)
+    public String engine;
+
+    @Column(nullable = false)
+    public String vClass;
+
+    @Column(nullable = false)
+    public String fuel;
+
+    @Column(nullable = false)
+    public int seats;
+
+    // EURO6...
+    @Column(nullable = false)
+    public String emissions;
+
+    // --- //
 
     // Base, Economy, Caravelle, Chick Magnet...
     @Column

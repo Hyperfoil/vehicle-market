@@ -20,7 +20,7 @@ import MakeSelect from './components/MakeSelect'
 import ModelSelect from './components/ModelSelect'
 import NumberSelect from './components/NumberSelect'
 import SimpleSelect from './components/SimpleSelect'
-import { fetchAllFeatures, publishOffering, FeatureCategory, Feature, Offering, PartialOffering } from './listingService'
+import { fetchAllFeatures, publishOffering, FeatureCategory, Feature, OfferingOverview, OfferingDetails, PartialOffering } from './listingService'
 import './SellPage.css'
 import { ContactInfo, getUserToken } from './userService'
 
@@ -46,7 +46,7 @@ function parseDate(value: string): Date {
 function Description(props: DescriptionProps) {
     const o = props.offering
     // TODO: more validations than just mileage
-    const [valid, setValid] = useState<Partial<Record<keyof Offering, boolean>>>({ mileage: true })
+    const [valid, setValid] = useState<Partial<Record<keyof OfferingOverview, boolean>>>({ mileage: true })
     const [allFeatures, setAllFeatures] = useState<Feature[]>()
     useEffect(() => {
         fetchAllFeatures().then(fs => setAllFeatures(fs))
@@ -57,19 +57,19 @@ function Description(props: DescriptionProps) {
         <Form isHorizontal >
             <FormGroup fieldId="make" label="Make" isRequired>
                 <MakeSelect
-                    make={ o.model?.make }
-                    onChange={ make => props.onChange({ ...o, model: { ...o.model, make} }) }/>
+                    make={ o.overview.make }
+                    onChange={ make => props.onChange({ ...o, overview: { ...o.overview, make }}) }/>
             </FormGroup>
             <FormGroup fieldId="model" label="Model" isRequired>
                 <ModelSelect
-                    make={ o.model?.make}
-                    model={ o.model?.model}
-                    onChange={ model => props.onChange({ ...o, model: { ...o.model, model} }) }/>
+                    make={ o.overview.make}
+                    model={ o.overview.model}
+                    onChange={ model => props.onChange({ ...o, overview: { ...o.overview, model }}) }/>
             </FormGroup>
             <FormGroup fieldId="year" label="Year" isRequired>
                 <NumberSelect
-                    value={ o.year}
-                    onChange={ year => props.onChange({ ...o, year}) }
+                    value={ o.overview.year }
+                    onChange={ year => props.onChange({ ...o, overview: { ...o.overview, year }}) }
                     from={ 1945 }
                     to={ new Date().getFullYear() }
                     order='desc' />
@@ -77,31 +77,31 @@ function Description(props: DescriptionProps) {
             <FormGroup fieldId="trimLevel" label="Trim level">
                 <TextInput
                     id="trimLevel"
-                    value={ o.trimLevel }
-                    onChange={ trimLevel => props.onChange({ ...o, trimLevel }) }
+                    value={ o.overview.trimLevel }
+                    onChange={ trimLevel => props.onChange({ ...o, overview: { ...o.overview, trimLevel }}) }
                     />
             </FormGroup>
             <FormGroup fieldId="fuel" label="Fuel" isRequired>
                 <SimpleSelect
-                    value={ o.model?.fuel }
-                    onChange={ fuel => props.onChange({ ...o, model: { ...o.model, fuel }})}
+                    value={ o.overview.fuel }
+                    onChange={ fuel => props.onChange({ ...o, overview: { ...o.overview, fuel }}) }
                     options={["Gasoline", "Diesel", "Electric"]} />
             </FormGroup>
             <FormGroup fieldId="color" label="Color" isRequired>
                 <TextInput
                     id="color"
-                    value={ o.color }
-                    onChange={ color => props.onChange({ ...o, color }) }
+                    value={ o.overview.color }
+                    onChange={ color => props.onChange({ ...o, overview: { ...o.overview, color }}) }
                     />
             </FormGroup>
             <FormGroup fieldId="mileage" label="Mileage" isRequired>
                 <TextInput
                     id="mileage"
                     validated={ valid.mileage ? 'default' : 'error' }
-                    value={ o.mileage }
+                    value={ o.overview?.mileage }
                     onChange={ m => {
                         if (/^-?\d*$/.test(m)) {
-                            props.onChange({ ...o, mileage: parseInt(m)})
+                            props.onChange({ ...o, overview: { ...o.overview, mileage: parseInt(m) }}) 
                             setValid({ ...valid, mileage: true });
                         } else {
                             setValid({ ...valid, mileage: false });
@@ -266,7 +266,7 @@ function Finished(props: FinishedProps) {
 }
 
 function SellPage() {
-    const [offering, setOffering] = useState<PartialOffering>({})
+    const [offering, setOffering] = useState<PartialOffering>({ overview: {} })
     const [contactInfo, setContactInfo] = useState<Partial<ContactInfo>>({})
     const [completed, setCompleted] = useState(false)
     const [failed, setFailed] = useState(false)

@@ -11,11 +11,6 @@
     <artifactId>vehicle-discovery</artifactId>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>vehicle-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
             <version>${org.apache.commons-csv.version}</version>

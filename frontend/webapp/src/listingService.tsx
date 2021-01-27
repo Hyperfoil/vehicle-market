@@ -4,15 +4,16 @@ import { ContactInfo, appendToken } from './userService';
 
 const BASE_URL = CONFIG ? CONFIG.listingUrl : "";
 
-// Maps to io.hyperfoil.market.vehicle.dto.OfferingOverview
+// Maps to io.hyperfoil.market.listing.client.OfferingOverview
 export type OfferingOverview = {
     id: number,
-    price: number,
     make: string,
-    modelName: string, 
+    model: string, 
     trimLevel: string,
     trany: string,
+    vClass: string,
     fuel: string,
+    seats: number
     emissions: string,
     engine: string,
     mileage: number,
@@ -22,15 +23,9 @@ export type OfferingOverview = {
     imageURL: string,
 }
 
-// Maps to io.hyperfoil.market.vehicle.dto.OfferingDetails
-export type Offering = {
-    id: number,
-    price: number,
-    model: VehicleDescription,
-    trimLevel: string,
-    mileage: number,
-    year: number,
-    color: string,
+// Maps to io.hyperfoil.market.listing.client.OfferingDetails
+export type OfferingDetails = {
+    overview: OfferingOverview,
     prevOwners: number,
     inspectionValidUntil?: Date,
     history: string,
@@ -38,7 +33,7 @@ export type Offering = {
     gallery: GalleryItem[],
 }
 
-export type PartialOffering = Partial<Omit<Offering, "model"> & { model: Partial<VehicleDescription> }>
+export type PartialOffering = Partial<Omit<OfferingDetails, "overview">> & { overview: Partial<OfferingOverview> }
 
 export type FeatureCategory = 'INTERIOR' | 'INFOTAINMENT' | 'EXTERIOR' | 'SAFETY' | 'OTHER';
 
@@ -68,7 +63,7 @@ export function fetchOfferings(page: number, perPage: number): Promise<OfferingL
     return fetch(BASE_URL + "/list?page=" + page + "&perPage=" + perPage).then(res => res.json())
 }
 
-export function fetchOfferingById(id: number): Promise<Offering> {
+export function fetchOfferingById(id: number): Promise<OfferingDetails> {
     return fetch(BASE_URL + "/offering/" + id).then(res => res.json())
 }
 

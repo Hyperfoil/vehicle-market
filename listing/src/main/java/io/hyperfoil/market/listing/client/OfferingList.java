@@ -1,9 +1,6 @@
-package io.hyperfoil.market.vehicle.dto;
-
-import io.hyperfoil.market.vehicle.model.VehicleOffer;
+package io.hyperfoil.market.listing.client;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OfferingList {
 

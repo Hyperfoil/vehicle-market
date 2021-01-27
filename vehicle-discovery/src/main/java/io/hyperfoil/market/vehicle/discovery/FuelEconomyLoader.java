@@ -1,13 +1,12 @@
 package io.hyperfoil.market.vehicle.discovery;
 
-import io.hyperfoil.market.vehicle.model.VehicleDescription;
-import io.hyperfoil.market.vehicle.repository.VehicleDescriptionRepository;
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -23,8 +22,8 @@ import java.util.logging.Logger;
 public class FuelEconomyLoader {
     private static final Logger logger = Logger.getLogger(VehicleDiscoveryService.class.getName());
 
-    @Inject
-    VehicleDescriptionRepository repository;
+    @PersistenceUnit(unitName = "discovery")
+    EntityManager em;
 
     /**
      * Loads vehicle descriptions from local CSV file
@@ -57,7 +56,7 @@ public class FuelEconomyLoader {
     private void loadStream(InputStream stream) throws IOException {
         int i = 0;
         for (CSVRecord record : CSVFormat.DEFAULT.withHeader().parse(new InputStreamReader(stream))) {
-            repository.addVehicle(new VehicleDescription(
+            em.persist(new VehicleDescription(
                     record.get("make"),
                     record.get("model"),
                     Integer.parseInt(record.get("year")),

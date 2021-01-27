@@ -1,4 +1,4 @@
-package io.hyperfoil.market.vehicle.model;
+package io.hyperfoil.market.listing.model;
 
 public enum VehicleFeatureCategory {
     INTERIOR,

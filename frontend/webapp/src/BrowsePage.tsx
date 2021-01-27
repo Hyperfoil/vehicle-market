@@ -35,7 +35,7 @@ function BrowsePage() {
                 style={{ gridRow: i + 1}}
             />
             <img
-                alt={ o.make + " " + o.modelName }
+                alt={ o.make + " " + o.model }
                 className="offeringimage"
                 style={{ gridRow: i + 1}}
                 src={ !o.imageURL ? "/nocar.svg" : o.imageURL }
@@ -46,7 +46,7 @@ function BrowsePage() {
                 style={{ gridRow: i + 1}}
                 onClick={() => history.push("/offering/" + o.id)}
             >
-                <h3>{ o.make } { o.modelName }, { o.year }</h3>
+                <h3>{ o.make } { o.model }, { o.year }</h3>
                 { o.history && <>{ o.history }<br /></> }
                 {/* { o.features.slice(0, 8).map((f, j) => addComma(j, f.description ?
                     <Tooltip key={j} content={ f.description }><span style={{ textDecoration: "underline "}}>{ f.name }</span></Tooltip>
@@ -64,7 +64,7 @@ function BrowsePage() {
                 onClick={() => history.push("/offering/" + o.id)}
             >
                 Price:<br />
-                <span className="price total">${ o.price }</span><br />
+                <span className="price total">$1234.00</span><br />
                 Monthly installment:<br />
                 <span className="price installment">from $123</span>
             </div>

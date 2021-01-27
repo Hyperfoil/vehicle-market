@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import 'pure-react-carousel/dist/react-carousel.es.css';
-import { FeatureCategory, fetchOfferingById, Offering } from './listingService';
+import { FeatureCategory, fetchOfferingById, OfferingDetails } from './listingService';
 import {
     Bullseye,
     Spinner,
@@ -12,14 +12,14 @@ import {
 } from '@patternfly/react-core';
 import './OfferingPage.css'
 
-function hasFeature(offering: Offering, category: FeatureCategory) {
+function hasFeature(offering: OfferingDetails, category: FeatureCategory) {
     return offering.features.some(f => f.category === category);
 }
 
 function OfferingPage() {
     const params: any = useParams()
     const offerId: number = params.offerId
-    const [offering, setOffering] = useState<Offering>()
+    const [offering, setOffering] = useState<OfferingDetails>()
     useEffect(() => {
         fetchOfferingById(offerId).then(setOffering)
     }, [offerId])
@@ -35,33 +35,33 @@ function OfferingPage() {
             { offering.gallery.map((img, i) => <img key={i} src={img.url} alt={img.title} />)}
         </div>
         <div>
-            <h1>{ offering.model.make } { offering.model.model }, { offering.year }</h1>
-            <span>Buy now for just <span className="price total">${ offering.price }</span></span>
+            <h1>{ offering.overview.make } { offering.overview.model }, { offering.overview.year }</h1>
+            <span>Buy now for just <span className="price total">$1234.00</span></span>
             <h3>Technical parameters</h3>
             <div className="techparams">
                 <span className="label">Operating since</span>
-                <span>{ offering.year }</span>
+                <span>{ offering.overview.year }</span>
                 <span className="label">Class</span>
-                <span>{ offering.model.vClass }</span>
+                <span>{ offering.overview.vClass }</span>
                 <span className="label">Mileage</span>
-                <span>{ offering.mileage }</span>
+                <span>{ offering.overview.mileage }</span>
                 <span className="label">Fuel</span>
-                <span>{ offering.model.fuel }</span>
+                <span>{ offering.overview.fuel }</span>
                 <span className="label">Engine</span>
-                <span>{ offering.model.engine }</span>
+                <span>{ offering.overview.engine }</span>
                 <span className="label">Seats</span>
-                <span>{ offering.model.seats }</span>
+                <span>{ offering.overview.seats }</span>
                 <span className="label">Transmission</span>
-                <span>{ offering.model.trany }</span>
+                <span>{ offering.overview.trany }</span>
                 <span className="label">Emissions</span>
-                <span>{ offering.model.emissions }</span>
+                <span>{ offering.overview.emissions }</span>
                 <span className="label">Color</span>
-                <span>{ offering.color }</span>
+                <span>{ offering.overview.color }</span>
                 <span className="label">History</span>
                 <span>{ offering.history }</span>
-                { offering.trimLevel !== "" && <>
+                { offering.overview.trimLevel !== "" && <>
                 <span className="label">Trim level</span>
-                <span>{ offering.trimLevel }</span>
+                <span>{ offering.overview.trimLevel }</span>
                 </>}
                 { offering.inspectionValidUntil && <>
                 <span className="label">Inspection valid until</span>

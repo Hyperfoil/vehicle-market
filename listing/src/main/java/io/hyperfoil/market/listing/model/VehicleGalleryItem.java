@@ -1,4 +1,4 @@
-package io.hyperfoil.market.vehicle.model;
+package io.hyperfoil.market.listing.model;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;

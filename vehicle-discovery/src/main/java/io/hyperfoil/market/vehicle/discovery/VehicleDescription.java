@@ -1,13 +1,15 @@
-package io.hyperfoil.market.vehicle.model;
+package io.hyperfoil.market.vehicle.discovery;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -67,7 +69,8 @@ public class VehicleDescription {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence")
+    @SequenceGenerator(name = "sequence", allocationSize = 1000, sequenceName = "V_DESCRIPTION_SEQUENCE")
     public Long id;
 
     @Column(nullable = false)
