@@ -24,7 +24,7 @@ function OfferingPage() {
         fetchOfferingById(offerId).then(setOffering)
     }, [offerId])
     const [activeFeatureTab, setActiveFeatureTab] = useState<FeatureCategory>('INTERIOR')
-    const features = offering?.features.filter(f => f.category === activeFeatureTab)
+    const features = offering?.features?.filter(f => f.category === activeFeatureTab)
     if (!offering) {
         return <Bullseye><Spinner /></Bullseye>
     }

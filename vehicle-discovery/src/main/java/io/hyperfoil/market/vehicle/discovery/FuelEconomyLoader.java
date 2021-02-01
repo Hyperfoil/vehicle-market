@@ -62,11 +62,11 @@ public class FuelEconomyLoader {
                     Integer.parseInt(record.get("year")),
                     record.get("trany"),
                     record.get("drive"),
-                    record.get("engId") + ": " + record.get("displ") + "l " + record.get("cylinders") + " cylinders",
+                    /* record.get("engId") + ": " + */ record.get("displ") + "l " + record.get("cylinders") + " cylinders",
                     record.get("VClass"),
                     record.get("fuelType1"),
                     0,
-                    record.get("co2TailpipeGpm")
+                    parseCO2Record(record.get("co2TailpipeGpm"))
             ));
 
             if (++i % 1000 == 0) {
@@ -74,6 +74,12 @@ public class FuelEconomyLoader {
             }
         }
         logger.info("Processed a total of " + i + " vehicle descriptions");
+    }
+
+    private String parseCO2Record(String co2TailpipeGpm) {
+        int decimal = co2TailpipeGpm.indexOf('.');
+
+        return co2TailpipeGpm.substring(0, decimal == -1 ? co2TailpipeGpm.length() : decimal + 2) + " CO2";
     }
 
 }

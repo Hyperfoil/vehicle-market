@@ -24,6 +24,7 @@ import javax.persistence.Table;
         @Index(columnList = "FUEL", name = "V_DESCRIPTION_FUEL"),
 })
 @NamedQuery(name=VehicleDescription.QUERY_COUNT, query="SELECT COUNT(vd.id) FROM VehicleDescription vd")
+@NamedQuery(name=VehicleDescription.QUERY_RANDOM, query="SELECT vd FROM VehicleDescription vd ORDER BY random()")
 @NamedQuery(name=VehicleDescription.QUERY_GET_VD_BY_IDS, query="SELECT vd FROM VehicleDescription vd where vd.id in :ids")
 //@NamedQuery(name=VehicleDescription.QUERY_BY_CATEGORY, query="SELECT vd FROM VehicleDescription vd where vd.category = :category",
 //        hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
@@ -42,6 +43,7 @@ import javax.persistence.Table;
 public class VehicleDescription {
 
     public static final String QUERY_COUNT = "VehicleDescription.getCount";
+    public static final String QUERY_RANDOM = "VehicleDescription.getRandom";
     public static final String QUERY_GET_VD_BY_IDS = "VehicleDescription.getVdByIds";
     public static final String QUERY_BY_CATEGORY = "VehicleDescription.distinctCategory";
     public static final String DISTINCT_YEARS = "VehicleDescription.distinctYears";

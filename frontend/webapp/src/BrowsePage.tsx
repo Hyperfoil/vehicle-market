@@ -17,15 +17,17 @@ function addComma(key: any, element: any, add: boolean) {
 }
 
 function BrowsePage() {
-    const [page, setPage] = useState(0)
+    const [page, setPage] = useState(1)
     const [perPage, setPerPage] = useState(10)
     const [offerings, setOfferings] = useState<OfferingList>()
     useEffect(() => {
-        fetchOfferings(page, perPage).then(setOfferings).catch(_ => setOfferings(NO_OFFERINGS))
+        fetchOfferings(page - 1, perPage).then(setOfferings).catch(_ => setOfferings(NO_OFFERINGS))
     }, [page, perPage])
     const history = useHistory()
     if (!offerings) {
         return <Bullseye><Spinner /></Bullseye>
+    } else if (offerings.total == 0) {
+        return <div id="offerings">Please load offerings into the database</div>
     }
     return (<>
     <div id="offerings">

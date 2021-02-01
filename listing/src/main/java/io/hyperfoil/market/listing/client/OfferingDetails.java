@@ -4,8 +4,9 @@ import io.hyperfoil.market.listing.model.VehicleFeature;
 import io.hyperfoil.market.listing.model.VehicleGalleryItem;
 import io.hyperfoil.market.listing.model.VehicleOffer;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
+import java.util.Collections;
 
 /**
  * Client representation of {@link VehicleOffer}
@@ -13,7 +14,7 @@ import java.util.Date;
 public class OfferingDetails {
     public OfferingOverview overview;
     public int prevOwners;
-    public Date inspectionValidUntil;
+    public LocalDate inspectionValidUntil;
     public String history;
     public Collection<VehicleFeature> features;
     public Collection<VehicleGalleryItem> gallery;
@@ -21,7 +22,7 @@ public class OfferingDetails {
     public OfferingDetails() {
         // public empty constructor
     }
-    
+
     public OfferingDetails(VehicleOffer offer) {
         this.overview = new OfferingOverview(offer);
         this.prevOwners = offer.prevOwners;

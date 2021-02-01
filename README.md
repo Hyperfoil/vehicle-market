@@ -42,7 +42,7 @@ A read-only service that provides a single point of contact regarding all availa
 ### User/Trader service :red_circle:
 Service responsible for maintaining a list of authorized users of the application.
 
-### Listing Service :red_circle:
+### Listing Service :green_circle:
 All listings on the system are registered with the listing service.  Here sellers can add/remove/update their vehicle listings and buyers can search for and view listings of vehicles that are available to purchase.
 
 ### Bidding Service :red_circle:
@@ -62,7 +62,7 @@ A finance broker service allow buyers to receive and accept finance offers on ve
 
 ## Datasets
 
-### Vehicle database :red_circle:
+### Vehicle database :green_circle:
 An extensive list of vehicle makes/models and emissions data is available from the US government fuel economy website [here](https://www.fueleconomy.gov/feg/ws/index.shtml);
 
 The data is released under the `U.S. Public Domain license`, which does not restrict the usage of the data for our use case.
@@ -70,7 +70,7 @@ The data is released under the `U.S. Public Domain license`, which does not rest
 ### Address database :red_circle:
 A random address generator can be created using a dataset released by Intel under a XXX licensing agreement
 
-### Name database :red_circle:
+### Name database :green_circle:
 A random name generator can be created using a dataset released by Intel under a XXX licensing agreement
 
 ## Building the project
