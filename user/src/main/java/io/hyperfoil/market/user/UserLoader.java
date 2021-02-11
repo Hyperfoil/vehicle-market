@@ -12,10 +12,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import io.hyperfoil.market.user.entity.PlaintextCredentials;
 import io.hyperfoil.market.user.entity.Token;
 import io.hyperfoil.market.user.entity.User;
 import io.hyperfoil.nagen.loader.NameGenerator;
@@ -38,8 +41,13 @@ public class UserLoader {
          batch = 100;
       }
       for (int i = 0; i < users; ++i) {
-         User user = randomUser();
+         String password = NAME_GENERATOR.getRandomPassword();
+         User user = randomUser(password);
          entityManager.persist(user);
+         PlaintextCredentials credentials = new PlaintextCredentials();
+         credentials.user = user;
+         credentials.password = password;
+         entityManager.persist(credentials);
          int userTokens = (i + 1) * tokens / users - i * tokens / users;
          for (int j = 0; j < userTokens; ++j) {
             entityManager.persist(randomToken(user));
@@ -50,7 +58,17 @@ public class UserLoader {
       }
    }
 
-   private User randomUser() throws InvalidKeySpecException, NoSuchAlgorithmException {
+   @GET
+   @Produces("text/csv")
+   public String dump() {
+      StringBuilder sb = new StringBuilder();
+      entityManager.createNamedQuery(PlaintextCredentials.FIND_ALL, PlaintextCredentials.class)
+            .getResultStream().forEach(pc -> sb.append(pc.user.username).append(',')
+            .append('"').append(pc.password.replaceAll("\"", "\\\"")).append('"').append('\n'));
+      return sb.toString();
+   }
+
+   private User randomUser(String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
       User user = new User();
       user.firstName = NAME_GENERATOR.getRandomFirstName();
       user.lastName = NAME_GENERATOR.getRandomLastName();
@@ -62,7 +80,7 @@ public class UserLoader {
       user.salt = new byte[UserService.SALT_BYTES];
       // We are intentionally NOT using cryptographically safe source of random
       random.nextBytes(user.salt);
-      user.passhash = UserService.computeHash(NAME_GENERATOR.getRandomPassword(), user.salt, config.hashIterations);
+      user.passhash = UserService.computeHash(password, user.salt, config.hashIterations);
       return user;
    }
 

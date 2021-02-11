@@ -6,6 +6,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.crypto.SecretKeyFactory;
@@ -54,7 +55,10 @@ public class UserService {
          throw new WebApplicationException(Response.Status.BAD_REQUEST);
       }
       try {
-         User user = entityManager.createNamedQuery(User.FIND_BY_USERNAME, User.class).getSingleResult();
+         User user = entityManager.createNamedQuery(User.FIND_BY_USERNAME, User.class).setParameter("u", username).getSingleResult();
+         if (!Objects.equals(user.username, username)) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+         }
          byte[] passhash = computeHash(password, user.salt, config.hashIterations);
          if (Arrays.equals(passhash, user.passhash)) {
             Token token = new Token();

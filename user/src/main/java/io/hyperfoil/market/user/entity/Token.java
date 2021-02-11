@@ -15,8 +15,6 @@ import javax.persistence.Table;
 
 @Entity
 public class Token {
-   public static final String FIND_BY_TOKEN = "FIND_BY_TOKEN";
-
    @Id
    @Column(nullable = false)
    public String token;

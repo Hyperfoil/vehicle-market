@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
       @UniqueConstraint(name = "unique_username", columnNames = "username")
    })
 @NamedQueries({
-      @NamedQuery(name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u")
+      @NamedQuery(name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.username = :u")
    })
 public class User {
    public static final String FIND_BY_USERNAME = "FIND_BY_USERNAME";
