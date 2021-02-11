@@ -1,0 +1,10 @@
+name: first-benchmark
+http:
+  host: http://localhost:8080
+  sharedConnections: 10
+usersPerSec: 10
+duration: 10s
+scenario:
+- fetchIndex:
+  - httpRequest:
+      GET: /

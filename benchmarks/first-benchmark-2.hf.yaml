@@ -1,0 +1,21 @@
+name: first-benchmark
+http:
+  host: http://localhost:8080
+  sharedConnections: 10
+phases:
+- listVehicles:
+    constantRate:
+      usersPerSec: 10
+      duration: 10s
+      scenario:
+      - fetchIndex:
+        - httpRequest:
+            GET: /
+- seeDetails:
+    constantRate:
+      usersPerSec: 10
+      duration: 10s
+      scenario:
+      - fetchDetails:
+        - httpRequest:
+            GET: /offering/1

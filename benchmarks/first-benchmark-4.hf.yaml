@@ -1,0 +1,31 @@
+name: first-benchmark
+http:
+  host: http://localhost:8080
+  sharedConnections: 10
+phases:
+- main:
+    constantRate:
+      startAfter: rampup
+      usersPerSec: 30
+      duration: 10s
+      forks:
+      - listVehicles: &listVehicles
+          weight: 2
+          scenario:
+          - fetchIndex:
+            - httpRequest:
+                GET: /
+      - seeDetails: &seeDetails
+          weight: 1
+          scenario:
+          - fetchDetails:
+            - httpRequest:
+                GET: /offering/1
+- rampup:
+    increasingRate:
+      initialUsersPerSec: 3
+      targetUsersPerSec: 30
+      duration: 10s
+      forks:
+      - listVehicles: *listVehicles
+      - seeDetails: *seeDetails

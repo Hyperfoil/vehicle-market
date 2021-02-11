@@ -1,0 +1,20 @@
+name: first-benchmark
+http:
+  host: http://localhost:8080
+  sharedConnections: 10
+duration: 10s
+usersPerSec: 10
+scenario:
+- fetchDetails:
+  - randomInt:
+      min: 1
+      max: 100
+      toVar: offering
+  - httpRequest:
+      GET: /offering/${offering}
+      handler:
+        body:
+          parseHtml:
+            onEmbeddedResource:
+              fetchResource:
+                maxResources: 16

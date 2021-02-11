@@ -1,0 +1,74 @@
+name: login
+http:
+# Frontend
+- host: http://localhost:8080
+  sharedConnections: 10
+# User service
+- host: http://localhost:8083
+  sharedConnections: 10
+duration: 10s
+usersPerSec: 10
+maxSessions: 60
+scenario:
+  orderedSequences:
+  - fetchIndex:
+    - httpRequest:
+        GET: /
+        authority: localhost:8080
+    - randomInt:
+        min: 0
+        max: 2
+        toVar: failedAttempts
+    - randomCsvRow:
+        file: /tmp/credentials.csv
+        removeQuotes: true
+        columns:
+          0: username
+          1: password
+    - thinkTime: 2s
+  - wrongLogin:
+    - breakSequence:
+        intCondition:
+          fromVar: failedAttempts
+          equalTo: 0
+        onBreak:
+        - newSequence: successfulLogin
+    - httpRequest:
+        POST: /login
+        authority: localhost:8083
+        body:
+          form:
+          - name: username
+            fromVar: username
+          - name: password
+            value: th1sIsMy$EcretPa55W%rD
+        handler:
+          autoRangeCheck: false
+    - addToInt: failedAttempts--
+    - thinkTime:
+        duration: 2s
+        random: NEGATIVE_EXPONENTIAL
+        min: 500 ms
+        max: 10s
+    - nextSequence: wrongLogin
+  sequences:
+  - successfulLogin:
+    - httpRequest:
+        POST: /login
+        authority: localhost:8083
+        body:
+          form:
+          - name: username
+            fromVar: username
+          - name: password
+            fromVar: password
+        handler:
+          body:
+            store: token
+    - nextSequence: fetchProfile
+  - fetchProfile:
+    - httpRequest:
+        GET: /info?token=${urlencode:token}
+        authority: localhost:8083
+
+

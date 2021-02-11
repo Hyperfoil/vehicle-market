@@ -1,0 +1,49 @@
+name: vehicle-market
+http:
+- host: http://localhost:8080
+  sharedConnections: 10
+- host: http://localhost:8082
+  sharedConnections: 10
+duration: 10s
+usersPerSec: 10
+scenario:
+  orderedSequences:
+  - fetchWebpage:
+    - randomInt:
+        min: 1
+        max: 2
+        toVar: offering
+    - httpRequest:
+        GET: /offering/${offering}
+        authority: localhost:8080
+        handler:
+          body:
+            parseHtml:
+              onEmbeddedResource:
+                fetchResource:
+                  maxResources: 16
+  - fetchJson:
+    - httpRequest:
+        GET: /offering/${offering}
+        authority: localhost:8082
+        handler:
+          body:
+            json:
+              query: .gallery[].url
+              toArray: gallery[10]
+    - foreach:
+        fromVar: gallery
+        sequence:   fetchImage
+        counterVar: numImages
+    - awaitInt:
+        var: numImages
+        equalTo: 0
+  sequences:
+  - fetchImage[10]:
+    - httpRequest:
+        GET: ${ gallery[.] }
+        authority: localhost:8080
+        sync: false
+        handler:
+          onCompletion:
+            addToInt: numImages--

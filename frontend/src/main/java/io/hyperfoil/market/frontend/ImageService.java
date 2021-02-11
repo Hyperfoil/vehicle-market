@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.Cache;
@@ -28,7 +29,10 @@ public class ImageService {
    @Path("car")
    @Produces("image/svg+xml")
    @Cache
-   public String car(@QueryParam("type") String type, @QueryParam("color") String color) {
+   public Response car(@QueryParam("type") String type, @QueryParam("color") String color) {
+      if (type == null || color == null) {
+         return Response.status(Response.Status.BAD_REQUEST).build();
+      }
       ParsedImage image = images.computeIfAbsent(type, t -> {
          InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(type + ".svg");
          if (stream == null) {
@@ -58,7 +62,7 @@ public class ImageService {
       if (image == null) {
          throw new WebApplicationException("Cannot load image for type " + type);
       } else {
-         return image.withColor(color);
+         return Response.ok(image.withColor(color)).build();
       }
    }
 
