@@ -4,9 +4,8 @@ import {
     Pagination,
     PaginationVariant,
     Spinner,
-    Tooltip,
 } from '@patternfly/react-core'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import { fetchOfferings, OfferingList, NO_OFFERINGS } from './listingService'
 import './BrowsePage.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -17,10 +16,14 @@ function addComma(key: any, element: any, add: boolean) {
 }
 
 function BrowsePage() {
-    const [page, setPage] = useState(1)
-    const [perPage, setPerPage] = useState(10)
+    const params = new URLSearchParams(useLocation().search);
+    const pageStr = params.get("page")
+    const ppStr = params.get("perPage")
+    const [page, setPage] = useState(pageStr && parseInt(pageStr) || 1)
+    const [perPage, setPerPage] = useState(ppStr && parseInt(ppStr) || 10)
     const [offerings, setOfferings] = useState<OfferingList>()
     useEffect(() => {
+        history.push("/?page=" + page + "&perPage=" + perPage);
         fetchOfferings(page - 1, perPage).then(setOfferings).catch(_ => setOfferings(NO_OFFERINGS))
     }, [page, perPage])
     const history = useHistory()
@@ -80,7 +83,7 @@ function BrowsePage() {
         }}
         itemCount={offerings.total}
         perPage={offerings.perPage}
-        page={offerings.page}
+        page={offerings.page + 1}
         variant={PaginationVariant.bottom}
         onSetPage={(_, p) => setPage(p)}
         onPerPageSelect={(_, pp) => setPerPage(pp)}

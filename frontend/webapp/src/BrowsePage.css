@@ -16,7 +16,7 @@
     background: linear-gradient(0deg, rgba(96,96,96,1) 0%, rgba(232,232,232,1) 100%);
     grid-column: image;
     height: 220px;
-
+    cursor: pointer;
 }
 
 .offeringdesc {
