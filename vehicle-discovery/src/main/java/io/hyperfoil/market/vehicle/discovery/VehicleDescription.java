@@ -40,6 +40,7 @@ import javax.persistence.Table;
         hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
 @NamedQuery(name=VehicleDescription.DISTINCT_MODELS, query="SELECT DISTINCT (vd.model) FROM VehicleDescription vd WHERE vd.make=:m",
         hints={ @QueryHint(name="javax.persistence.cache.retrieveMode", value="USE"), @QueryHint(name="javax.persistence.cache.storeMode", value="USE")})
+@NamedQuery(name = VehicleDescription.DELETE_ALL, query = "DELETE FROM VehicleDescription")
 public class VehicleDescription {
 
     public static final String QUERY_COUNT = "VehicleDescription.getCount";
@@ -52,6 +53,7 @@ public class VehicleDescription {
     public static final String DISTINCT_VCLASS = "VehicleDescription.distinctVClass";
     public static final String DISTINCT_MAKES = "VehicleDescription.distinctMakes";
     public static final String DISTINCT_MODELS = "VehicleDescription.distinctModels";
+    public static final String DELETE_ALL = "VehicleDescription.deleteAll";
 
     public VehicleDescription() {
         // no-args constructor required by JPA

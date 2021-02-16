@@ -8,6 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.Transactional;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
@@ -34,8 +35,8 @@ public class FuelEconomyLoader {
     public Response loadLocal() throws IOException {
         logger.info("Loading database from local CSV file");
 
-        loadStream(getClass().getClassLoader().getResourceAsStream("vehicles.csv"));
-        return Response.ok().build();
+        int inserted = loadStream(getClass().getClassLoader().getResourceAsStream("vehicles.csv"));
+        return Response.ok("Inserted " + inserted + " models.").build();
     }
 
     /**
@@ -49,11 +50,11 @@ public class FuelEconomyLoader {
         String url = "https://www.fueleconomy.gov/feg/epadata/vehicles.csv"; // TODO: store in config
         logger.info("Loading database from remote CSV file in URL: " + url);
 
-        loadStream(new URL(url).openStream());
-        return Response.ok().build();
+        int inserted = loadStream(new URL(url).openStream());
+        return Response.ok("Inserted " + inserted + " models.\n").build();
     }
 
-    private void loadStream(InputStream stream) throws IOException {
+    private int loadStream(InputStream stream) throws IOException {
         int i = 0;
         for (CSVRecord record : CSVFormat.DEFAULT.withHeader().parse(new InputStreamReader(stream))) {
             em.persist(new VehicleDescription(
@@ -74,12 +75,20 @@ public class FuelEconomyLoader {
             }
         }
         logger.info("Processed a total of " + i + " vehicle descriptions");
+        return i;
     }
 
     private String parseCO2Record(String co2TailpipeGpm) {
         int decimal = co2TailpipeGpm.indexOf('.');
 
         return co2TailpipeGpm.substring(0, decimal == -1 ? co2TailpipeGpm.length() : decimal + 2) + " CO2";
+    }
+
+    @DELETE
+    @Transactional
+    public String deleteAll() {
+        int delete = em.createNamedQuery(VehicleDescription.DELETE_ALL).executeUpdate();
+        return "Deleted " + delete + " models.\n";
     }
 
 }

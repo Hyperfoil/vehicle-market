@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
@@ -15,11 +14,11 @@ import javax.persistence.OneToOne;
  * their passwords), only the randomized loader should use that.
  */
 @Entity
-@NamedQueries({
-      @NamedQuery(name = PlaintextCredentials.FIND_ALL, query = "SELECT pc FROM PlaintextCredentials pc")
-})
+@NamedQuery(name = PlaintextCredentials.FIND_ALL, query = "SELECT pc FROM PlaintextCredentials pc")
+@NamedQuery(name = PlaintextCredentials.DELETE_ALL, query = "DELETE FROM PlaintextCredentials")
 public class PlaintextCredentials {
-   public static final String FIND_ALL = "FIND_ALL";
+   public static final String FIND_ALL = "PlaintextCredentials.findAll";
+   public static final String DELETE_ALL = "PlaintextCredentials.deleteAll";
 
    @Id
    public Long id;

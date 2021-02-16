@@ -6,6 +6,7 @@ import io.hyperfoil.market.listing.model.VehicleOffer;
 import io.hyperfoil.market.discovery.DiscoveryServiceInterface;
 import io.hyperfoil.market.discovery.VehicleDescription;
 import io.quarkus.narayana.jta.runtime.TransactionConfiguration;
+
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -15,17 +16,24 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Path("/loader")
 @RequestScoped
@@ -57,20 +65,42 @@ public class ListingLoaderService {
 
     @POST
     @Transactional
+    @Path("/features")
+    public String loadFeatures() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        try (InputStream stream = getClass().getClassLoader().getResourceAsStream("features.json")) {
+            VehicleFeature[] features = mapper.readValue(stream, new TypeReference<>() {});
+            for (VehicleFeature feature : features) {
+                em.merge(feature);
+            }
+            return "Inserted " + features.length + " features.\n";
+        }
+    }
+
+    @POST
+    @Transactional
     @TransactionConfiguration(timeout = 600) // TODO: quarkus specific
     @Path("/offering/{quantity}")
-    public Response get(@PathParam("quantity") int quantity) {
+    public Response loadOfferings(@PathParam("quantity") int quantity) {
         log.info("Proceeding with loading " + quantity + " offers");
 
         Random random = new Random(42); // TODO: remove fixed seed
 
         List<VehicleFeature> allFeatures = em.createNamedQuery(VehicleFeature.QUERY_ALL, VehicleFeature.class).getResultList();
+        if (allFeatures.isEmpty()) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                  .entity("No vehicle features are defined.").build();
+        }
         List<VehicleDescription> vehicles = Collections.emptyList();
         List<String> images = new ArrayList<>(IMAGES);
 
         while (quantity-- > 0) {
             if (vehicles.isEmpty()) {
                 vehicles = discoveryService.random(Integer.min(VEHICLE_BATCH_SIZE, quantity + 1));
+                if (vehicles.isEmpty()) {
+                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                          .entity("Discovery service does not contain any vehicles.").build();
+                }
             }
             VehicleDescription vehicle = vehicles.remove(vehicles.size() - 1);
 
@@ -109,7 +139,7 @@ public class ListingLoaderService {
                 log.info("Remaining " + quantity + " offers");
             }
         }
-        return Response.ok().build();
+        return Response.ok("Inserted " + quantity + " offers.\n").build();
     }
 
     private List<VehicleGalleryItem> galleryItemGenerator(int quantity, List<String> images, String color) {
@@ -124,4 +154,13 @@ public class ListingLoaderService {
         return list;
     }
 
+    @DELETE
+    @Path("/offering")
+    @Transactional
+    public String deleteAll() {
+        int deleted = em.createNamedQuery(VehicleOffer.DELETE_ALL).executeUpdate();
+        // TODO: do proper cascading delete!
+        em.createNamedQuery(VehicleGalleryItem.DELETE_ALL).executeUpdate();
+        return "Deleted " + deleted + " offers.\n";
+    }
 }

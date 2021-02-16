@@ -12,7 +12,7 @@ import java.util.List;
 public interface DiscoveryServiceInterface {
 
     @GET
-    @Path("/random/{quantity}")
-    List<VehicleDescription> random(@PathParam("quantity") int quantity);
+    @Path("/random/{maxResults}")
+    List<VehicleDescription> random(@PathParam("maxResults") int maxResults);
 
 }

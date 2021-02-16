@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -16,11 +15,11 @@ import javax.persistence.UniqueConstraint;
    }, uniqueConstraints = {
       @UniqueConstraint(name = "unique_username", columnNames = "username")
    })
-@NamedQueries({
-      @NamedQuery(name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.username = :u")
-   })
+@NamedQuery(name = User.FIND_BY_USERNAME, query = "SELECT u FROM User u WHERE u.username = :u")
+@NamedQuery(name = User.DELETE_ALL, query = "DELETE FROM User")
 public class User {
-   public static final String FIND_BY_USERNAME = "FIND_BY_USERNAME";
+   public static final String FIND_BY_USERNAME = "User.findByUsername";
+   public static final String DELETE_ALL = "User.deleteAll";
 
    @Id
    @GeneratedValue

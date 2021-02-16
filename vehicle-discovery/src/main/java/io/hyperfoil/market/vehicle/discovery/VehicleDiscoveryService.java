@@ -186,12 +186,12 @@ public class VehicleDiscoveryService {
     /**
      * Gets a number of random vehicle.
      *
-     * @param quantity the number of vehicles to return
+     * @param maxResults the number of vehicles to return
      * @return A vehicle description.
      */
     @GET
-    @Path("/random/{quantity}")
-    public Collection<VehicleDescription> random(@PathParam("quantity") int quantity) {
-        return em.createNamedQuery(QUERY_RANDOM, VehicleDescription.class).setMaxResults(quantity).getResultList();
+    @Path("/random/{maxResults}")
+    public Collection<VehicleDescription> random(@PathParam("maxResults") int maxResults) {
+        return em.createNamedQuery(QUERY_RANDOM, VehicleDescription.class).setMaxResults(maxResults).getResultList();
     }
 }

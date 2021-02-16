@@ -1,0 +1,47 @@
+[{
+  "id": 1,
+  "category": "SAFETY",
+  "name": "ABS",
+  "description": "Anti-blocking system helps you to crash slower"
+}, {
+  "id": 2,
+  "category": "OTHER",
+  "name": "Rain Sensor",
+  "description": "Turns windscreen wipers on when you least expect it"
+}, {
+  "id": 3,
+  "category": "INTERIOR",
+  "name": "Sport seats",
+  "description": "Good for your spine"
+}, {
+  "id": 4,
+  "category": "OTHER",
+  "name": "Start-Stop",
+  "description": "Destroys your battery 2x faster"
+}, {
+  "id": 5,
+  "category": "INFOTAINMENT",
+  "name": "GPS navigation",
+  "description": "Get lost informed"
+}, {
+  "id": 6,
+  "category": "EXTERIOR",
+  "name": "Stickers on rear bumper",
+  "description": "Looks good!"
+}, {
+  "id": 7,
+  "category": "EXTERIOR",
+  "name": "Stickers on front bumper",
+  "description": "Looks good!"
+}, {
+  "id": 8,
+  "category": "EXTERIOR",
+  "name": "Sun roof",
+  "description": "Heat in the summer and rain in the winter"
+}, {
+  "id": 9,
+  "category": "OTHER",
+  "name": "Powerful horn",
+  "description": "Eventualy everything will make noises but this"
+}]
+

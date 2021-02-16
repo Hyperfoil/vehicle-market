@@ -28,6 +28,7 @@ import java.util.Collection;
 @NamedQuery(name = VehicleOffer.QUERY_ALL, query = "SELECT vo FROM VehicleOffer vo")
 @NamedQuery(name = VehicleOffer.QUERY_COUNT, query = "SELECT COUNT(vo.id) FROM VehicleOffer vo")
 @NamedQuery(name = VehicleOffer.QUERY_OVERVIEW, query = "SELECT new io.hyperfoil.market.listing.client.OfferingOverview(vo.id, vo.make, vo.model, vo.trany, vo.vClass, vo.fuel, vo.seats, vo.emissions, vo.engine, image.url, vo.trimLevel, vo.history, vo.mileage, vo.year, vo.colorDescription) FROM VehicleOffer vo LEFT JOIN vo.mainImage image")
+@NamedQuery(name = VehicleOffer.DELETE_ALL, query = "DELETE FROM VehicleOffer")
 @NamedEntityGraph(name = VehicleOffer.WITH_GALLERY, attributeNodes = @NamedAttributeNode("gallery"))
 public class VehicleOffer {
 
@@ -35,6 +36,7 @@ public class VehicleOffer {
     public static final String QUERY_COUNT = "VehicleOffer.count";
     public static final String QUERY_OVERVIEW = "VehicleOffer.overview";
     public static final String WITH_GALLERY = "VehicleOffer.withGallery";
+    public static final String DELETE_ALL = "VehicleOffer.deleteAll";
 
     @Id
     @GeneratedValue

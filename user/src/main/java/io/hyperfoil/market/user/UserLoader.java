@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -36,7 +37,7 @@ public class UserLoader {
 
    @POST
    @Transactional // TODO: maybe we should split each batch to its transaction
-   public void load(@QueryParam("users") int users, @QueryParam("tokens") int tokens, @QueryParam("batch") @DefaultValue("100") int batch) throws InvalidKeySpecException, NoSuchAlgorithmException {
+   public String load(@QueryParam("users") int users, @QueryParam("tokens") int tokens, @QueryParam("batch") @DefaultValue("100") int batch) throws InvalidKeySpecException, NoSuchAlgorithmException {
       if (batch <= 0) {
          batch = 100;
       }
@@ -56,6 +57,7 @@ public class UserLoader {
             entityManager.flush();
          }
       }
+      return "Inserted " + users + " users and " + tokens + " tokens.\n";
    }
 
    @GET
@@ -66,6 +68,15 @@ public class UserLoader {
             .getResultStream().forEach(pc -> sb.append(pc.user.username).append(',')
             .append('"').append(pc.password.replaceAll("\"", "\\\"")).append('"').append('\n'));
       return sb.toString();
+   }
+
+   @DELETE
+   @Transactional
+   public String deleteAll() {
+      int deletedCredentials = entityManager.createNamedQuery(PlaintextCredentials.DELETE_ALL).executeUpdate();
+      int deletedTokens = entityManager.createNamedQuery(Token.DELETE_ALL).executeUpdate();
+      int deletedUsers = entityManager.createNamedQuery(User.DELETE_ALL).executeUpdate();
+      return String.format("Deleted %d tokens and %d users (%d credentials).\n", deletedTokens, deletedUsers, deletedCredentials);
    }
 
    private User randomUser(String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
