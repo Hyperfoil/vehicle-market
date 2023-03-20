@@ -16,6 +16,8 @@ services:
     depends_on: [ postgres ]
     ports:
     - 8081:8081
+    environment:
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://postgres:5432/vehicle
   listing:
     image: quay.io/hyperfoil/vehicle-market-listing-service
     deploy:
@@ -24,6 +26,9 @@ services:
     depends_on: [ postgres ]
     ports:
     - 8082:8082
+    environment:
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://postgres:5432/vehicle
+      - DISCOVERY_SERVICE_MP_REST_URL=http://discovery:8081/
   user:
     image: quay.io/hyperfoil/vehicle-market-user-service
     deploy:
@@ -32,6 +37,8 @@ services:
     depends_on: [ postgres ]
     ports:
     - 8083:8083
+    environment:
+      - QUARKUS_DATASOURCE_JDBC_URL=jdbc:postgresql://postgres:5432/user
   frontend:
     image: quay.io/hyperfoil/vehicle-market-frontend
     deploy:
@@ -39,6 +46,12 @@ services:
         condition: on-failure
     ports:
     - 8080:8080
+    environment:
+      - USER_LOADER=http://user:8083
+      - VEHICLE_LOADER=http://discovery:8081
+      # - DISCOVERY_SERVICE_URL=http://discovery:8081
+      # - LISTING_SERVICE_URL=http://listing:8082
+      # - USER_SERVICE_URL=http://user:8083
     depends_on:
     - user
     - listing
