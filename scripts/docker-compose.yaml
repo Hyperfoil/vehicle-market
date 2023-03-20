@@ -49,9 +49,6 @@ services:
     environment:
       - USER_LOADER=http://user:8083
       - VEHICLE_LOADER=http://discovery:8081
-      # - DISCOVERY_SERVICE_URL=http://discovery:8081
-      # - LISTING_SERVICE_URL=http://listing:8082
-      # - USER_SERVICE_URL=http://user:8083
     depends_on:
     - user
     - listing
